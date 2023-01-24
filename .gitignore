@@ -1,0 +1,10 @@
+.idea/
+.vscode/
+
+venv/
+.venv/
+.env
+
+.coverage
+.pytest_cache
+__pycache__
