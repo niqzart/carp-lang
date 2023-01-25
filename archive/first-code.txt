@@ -1,0 +1,46 @@
+(<operand> (<operand> 1 (<operand> 3 4)) (<operand> (<operand> 5 6) var))
+
+{
+  op: "<operand>"
+  a: {
+    op: "<operand>",
+    a: 1,
+    b: {
+      op: "<operand>",
+      a: 3,
+      b: 4,
+    },
+  },
+  b: {
+    op: "<operand>",
+    a: {
+      op: "<operand>",
+      a: 5,
+      b: 6,
+    },
+    b: <var>,
+  },
+}
+
+  put A 1
+  push A
+
+    put A 3
+    <operand.action> A 4
+
+  pop B
+  add A B
+
+push A
+
+    put A 5
+    <operand.action> A 6
+  push A
+
+  load A <var.location>
+
+  pop B
+  <operand.action> A B
+
+pop B
+add A B
