@@ -33,5 +33,13 @@ def translate(
     code = input_file.read()
 
 
+@app.command()
+def generate_schema(output_path: Optional[Path] = Argument(None)):
+    if output_path is None:
+        output_path = "docs/operation-schema.json"
+    with open(output_path, "w") as f:
+        json.dump(Operation.schema(), f, indent=2)
+
+
 if __name__ == "__main__":
     app()

@@ -1,0 +1,215 @@
+{
+  "title": "Operation",
+  "anyOf": [
+    {
+      "$ref": "#/definitions/BinaryOperation"
+    },
+    {
+      "$ref": "#/definitions/StackOperation"
+    },
+    {
+      "$ref": "#/definitions/JumpOperation"
+    },
+    {
+      "$ref": "#/definitions/MemoryOperation"
+    }
+  ],
+  "definitions": {
+    "common__operations__BinaryOperation__Code": {
+      "title": "Code",
+      "enum": [
+        "mov",
+        "cmp",
+        "pmc",
+        "add",
+        "sub",
+        "mul",
+        "div",
+        "mod"
+      ],
+      "type": "string"
+    },
+    "common__operations__Registry__Code": {
+      "title": "Code",
+      "enum": [
+        "A",
+        "B"
+      ],
+      "type": "string"
+    },
+    "Registry": {
+      "title": "Registry",
+      "type": "object",
+      "properties": {
+        "type": {
+          "title": "Type",
+          "default": "registry",
+          "enum": [
+            "registry"
+          ],
+          "type": "string"
+        },
+        "code": {
+          "$ref": "#/definitions/common__operations__Registry__Code"
+        }
+      },
+      "required": [
+        "code"
+      ]
+    },
+    "Value": {
+      "title": "Value",
+      "type": "object",
+      "properties": {
+        "type": {
+          "title": "Type",
+          "default": "value",
+          "enum": [
+            "value"
+          ],
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "value"
+      ]
+    },
+    "BinaryOperation": {
+      "title": "BinaryOperation",
+      "type": "object",
+      "properties": {
+        "code": {
+          "$ref": "#/definitions/common__operations__BinaryOperation__Code"
+        },
+        "right": {
+          "title": "Right",
+          "default": {
+            "type": "registry",
+            "code": "A"
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/Registry"
+            }
+          ]
+        },
+        "left": {
+          "title": "Left",
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Registry"
+            },
+            {
+              "$ref": "#/definitions/Value"
+            }
+          ]
+        }
+      },
+      "required": [
+        "code",
+        "left"
+      ]
+    },
+    "common__operations__StackOperation__Code": {
+      "title": "Code",
+      "enum": [
+        "grab",
+        "push"
+      ],
+      "type": "string"
+    },
+    "StackOperation": {
+      "title": "StackOperation",
+      "type": "object",
+      "properties": {
+        "code": {
+          "$ref": "#/definitions/common__operations__StackOperation__Code"
+        },
+        "right": {
+          "title": "Right",
+          "default": {
+            "type": "registry",
+            "code": "A"
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/Registry"
+            }
+          ]
+        }
+      },
+      "required": [
+        "code"
+      ]
+    },
+    "common__operations__JumpOperation__Code": {
+      "title": "Code",
+      "enum": [
+        "jz",
+        "jn",
+        "jb"
+      ],
+      "type": "string"
+    },
+    "JumpOperation": {
+      "title": "JumpOperation",
+      "type": "object",
+      "properties": {
+        "code": {
+          "default": "jb",
+          "allOf": [
+            {
+              "$ref": "#/definitions/common__operations__JumpOperation__Code"
+            }
+          ]
+        },
+        "offset": {
+          "title": "Offset",
+          "default": 1,
+          "type": "integer"
+        }
+      }
+    },
+    "common__operations__MemoryOperation__Code": {
+      "title": "Code",
+      "enum": [
+        "load",
+        "save"
+      ],
+      "type": "string"
+    },
+    "MemoryOperation": {
+      "title": "MemoryOperation",
+      "type": "object",
+      "properties": {
+        "code": {
+          "$ref": "#/definitions/common__operations__MemoryOperation__Code"
+        },
+        "right": {
+          "title": "Right",
+          "default": {
+            "type": "registry",
+            "code": "A"
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/Registry"
+            }
+          ]
+        },
+        "address": {
+          "title": "Address",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "code",
+        "address"
+      ]
+    }
+  }
+}
