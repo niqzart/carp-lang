@@ -1,4 +1,4 @@
-from common.constants import INPUT_ADDRESS, OUTPUT_ADDRESS
+from common.constants import INPUT_ADDRESS, OUTPUT_ADDRESS, IO_DEVICE_COUNT
 from common.operations import Operation, Registry
 from executor.alu import ALU, ALUOperation
 from executor.logs import LogRecord, RegistriesRecord, FlagsRecord
@@ -56,12 +56,14 @@ class DataPath:
 
     def memory_read(self, destination: Registry.Code, stack: bool = False) -> None:
         index = self.stack_pointer - 1 if stack else self.memory_pointer
-        if index < 16:
+        if 0 <= index < IO_DEVICE_COUNT:
             device = self.get_io_device(index)
             data = 0 if len(device) == 0 else device.pop()
             self.last_io[index] = data
-        else:
+        elif IO_DEVICE_COUNT <= index < len(self.data_memory):
             data = self.data_memory[index]
+        else:
+            raise IndexError("An attempt to read from outside the memory")
         self.general_registries[destination] = self.alu_execute(
             operation=ALUOperation.LEFT,
             left=data,
@@ -71,11 +73,13 @@ class DataPath:
     def memory_write(self, source: Registry.Code, stack: bool = False) -> None:
         data = self.general_registries[source]
         index = self.stack_pointer if stack else self.memory_pointer
-        if index < 16:
+        if 0 <= index < IO_DEVICE_COUNT:
             self.get_io_device(index).append(data)
             self.last_io[index] = data
-        else:
+        elif IO_DEVICE_COUNT <= index < len(self.data_memory):
             self.data_memory[index] = data
+        else:
+            raise IndexError("An attempt to write to outside the memory")
 
     def read_register(self, code: Registry.Code | None) -> int:
         return 0 if code is None else self.general_registries[code]

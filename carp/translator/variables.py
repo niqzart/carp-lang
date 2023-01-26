@@ -3,6 +3,7 @@ from typing import Pattern
 
 from pydantic import BaseModel
 
+from common.constants import IO_DEVICE_COUNT
 from common.errors import TranslationError
 
 
@@ -16,7 +17,7 @@ class VariableIndex:
 
     def __init__(self) -> None:
         self.variables: dict[str, int] = {}
-        self.next_location: int = 16
+        self.next_location: int = IO_DEVICE_COUNT
 
     def bad_name(self, name: str) -> bool:
         return re.fullmatch(self.VARIABLE_REGEX, name) is None

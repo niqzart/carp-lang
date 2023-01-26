@@ -77,8 +77,13 @@ def execute(
         input_data=input_data
     )
     control = ControlUnit(data_path)
-    control.main()
-    print("".join(chr(i) for i in data_path.get_output()))
+    try:
+        control.main()
+        print("".join(chr(i) for i in data_path.get_output()))
+    except Exception as e:
+        control.save_state()
+        print(f"Error: {e}")
+        print("Run with --save-log to debug this")
 
     if save_log:
         log_path = instructions.name.rpartition(".")[0] + ".clog"
