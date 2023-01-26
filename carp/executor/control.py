@@ -4,7 +4,8 @@ from common.operations import (
     Value,
     StackOperation,
     JumpOperation,
-    MemoryOperation, OperationBase,
+    MemoryOperation,
+    OperationBase,
 )
 from executor.alu import ALUOperation
 from executor.logs import LogRecord
@@ -12,13 +13,23 @@ from executor.wiring import DataPath
 
 
 class ControlUnit:
+    """
+    The main controller of the simulated system.
+    Works on top of :py:class:`DataPath` and performs all its operations against it.
+    Executes just one program by simulating all CPU cycles, implemented as methods.
+    """
+
     def __init__(self, data_path: DataPath):
         self.data_path: DataPath = data_path
         self.log: list[LogRecord] = []
         self.finished: bool = False
 
     def fetch_instruction(self) -> None:
-        if self.data_path.read_command():
+        """
+        Fetch the next instruction to execute & update the instruction pointer.
+        If there are no more instructions, program is marked as finished.
+        """
+        if not self.finished and self.data_path.read_command():
             self.data_path.instruction_pointer += 1
         else:
             self.finished = True
@@ -34,10 +45,10 @@ class ControlUnit:
 
     def execute_binary_operation(self, operation: BinaryOperation) -> None:
         if isinstance(operation.left, Registry):
-            source: int = self.data_path.read_register(operation.left.code)
+            source: int = self.data_path.general_registries[operation.left.code]
         elif isinstance(operation.left, Value):
             source: int = operation.left.value
-        target: int = self.data_path.read_register(operation.right.code)
+        target: int = self.data_path.general_registries[operation.right.code]
 
         if operation.code == BinaryOperation.Code.COMPARE:
             self.data_path.alu_execute(
@@ -52,13 +63,12 @@ class ControlUnit:
                 right=target,
             )
         else:
-            self.data_path.write_register(
-                operation.right.code,
-                self.data_path.alu_execute(
-                    operation=self.OPERATION_TO_ALU[operation.code],
-                    left=target,
-                    right=source,
-                ),
+            self.data_path.general_registries[
+                operation.right.code
+            ] = self.data_path.alu_execute(
+                operation=self.OPERATION_TO_ALU[operation.code],
+                left=target,
+                right=source,
             )
 
     def execute_jump_operation(self, operation: JumpOperation) -> None:
@@ -78,6 +88,12 @@ class ControlUnit:
         )
 
     def execute_instruction(self) -> None:
+        """
+        Executes the current operation, often using the ALU.
+        Operation is grabbed from the command_data registry.
+        No memory operations are performed and this stage.
+        """
+
         operation: OperationBase = self.data_path.command_data.__root__
         if isinstance(operation, BinaryOperation):
             self.execute_binary_operation(operation)
@@ -96,6 +112,12 @@ class ControlUnit:
             )
 
     def memory_fetch(self) -> None:
+        """
+        Acts on the memory if the current operation requires this step.
+        Operation is grabbed from the command_data registry.
+        Addresses in required registries should be prepared during previous stages.
+        No calculations are performed and this stage.
+        """
         operation: OperationBase = self.data_path.command_data.__root__
         if isinstance(operation, MemoryOperation):
             if operation.code is MemoryOperation.Code.LOAD_MEMORY:
@@ -109,9 +131,17 @@ class ControlUnit:
                 self.data_path.memory_read(operation.right.code, stack=True)
 
     def save_state(self) -> None:
+        """
+        Logging/debugging function add the record of the full state of
+        the DataPath to program execution logs.
+        """
         self.log.append(self.data_path.record_state())
 
     def main(self) -> None:
+        """
+        Executes the program, while the fetch_instruction cycle won't declare
+        the program as done (happens, when there are no more instructions)
+        """
         self.save_state()
         self.fetch_instruction()
         while not self.finished:

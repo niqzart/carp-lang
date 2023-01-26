@@ -5,6 +5,12 @@ from executor.logs import LogRecord, RegistriesRecord, FlagsRecord
 
 
 class DataPath:
+    """
+    All passive elements of the processor are simulated within this class.
+    It includes: registries, memory and the ALU.
+    Methods simulate processor's inner workings
+    """
+
     def __init__(
         self,
         data_memory_size: int,
@@ -40,24 +46,30 @@ class DataPath:
         return self.general_registries[Registry.Code.BUFFER]
 
     def read_command(self) -> bool:
+        """
+        Read from the instruction memory if there are any commands left.
+        Uses :py:attr:`instruction_pointer` as the address.
+        """
         if self.instruction_pointer >= len(self.instruction_memory):
             return False
         self.command_data = self.instruction_memory[self.instruction_pointer]
         return True
 
-    def get_io_device(self, index: int) -> list[int]:
+    def _get_io_device(self, index: int) -> list[int]:
         device = self.io.get(index)
         if device is None:
             raise Exception(f"Device {index} not connected")
         return device
 
-    def get_output(self) -> list[int]:
-        return self.io[OUTPUT_ADDRESS]
-
     def memory_read(self, destination: Registry.Code, stack: bool = False) -> None:
+        """
+        Reads from the data memory to a specified general registry.
+        Uses :py:attr:`memory_pointer` or :py:attr:`stack_pointer` as the address.
+        The memory-mapped input is also *imitated* here.
+        """
         index = self.stack_pointer - 1 if stack else self.memory_pointer
         if 0 <= index < IO_DEVICE_COUNT:
-            device = self.get_io_device(index)
+            device = self._get_io_device(index)
             data = 0 if len(device) == 0 else device.pop()
             self.last_io[index] = data
         elif IO_DEVICE_COUNT <= index < len(self.data_memory):
@@ -71,21 +83,20 @@ class DataPath:
         )
 
     def memory_write(self, source: Registry.Code, stack: bool = False) -> None:
+        """
+        Write data from the specified general registry to data memory.
+        Uses :py:attr:`memory_pointer` or :py:attr:`stack_pointer` as the address.
+        The memory-mapped output is also *imitated* here.
+        """
         data = self.general_registries[source]
         index = self.stack_pointer if stack else self.memory_pointer
         if 0 <= index < IO_DEVICE_COUNT:
-            self.get_io_device(index).append(data)
+            self._get_io_device(index).append(data)
             self.last_io[index] = data
         elif IO_DEVICE_COUNT <= index < len(self.data_memory):
             self.data_memory[index] = data
         else:
             raise IndexError("An attempt to write to outside the memory")
-
-    def read_register(self, code: Registry.Code | None) -> int:
-        return 0 if code is None else self.general_registries[code]
-
-    def write_register(self, code: Registry.Code, value: int) -> None:
-        self.general_registries[code] = value
 
     def alu_execute(
         self,
@@ -94,12 +105,18 @@ class DataPath:
         right: int,
         flags: bool = True,
     ) -> int:
+        """
+        Sends operations to the ALU. Numbers should come from registers and the
+        result should be discarded or written to a registry.
+        This also sets Zero and Negative flags unless `flags=True` is passed.
+        """
         self.alu.left = left
         self.alu.right = right
         self.alu.execute(operation, flags=flags)
         return self.alu.result
 
     def record_state(self) -> LogRecord:
+        """Logging/debugging function to record the full state of the DataPath"""
         result = LogRecord(
             registries=RegistriesRecord(
                 accumulator=self.accumulator,
@@ -118,3 +135,7 @@ class DataPath:
         )
         self.last_io = {}
         return result
+
+    def get_output(self) -> list[int]:
+        """A simplification function for getting full program's standard output"""
+        return self.io[OUTPUT_ADDRESS]
