@@ -1,0 +1,18 @@
+(if (> b (+ 1 2)) (print "hello"))
+
+    load A <b.location>
+  push A
+
+    put A 1
+    add A 2
+
+  pop B
+  cmp B A
+
+jn +1
+jb +(whatever)
+
+  {
+    load A "h"
+    save A <io2.location>
+  } x 5
