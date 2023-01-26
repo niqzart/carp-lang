@@ -87,9 +87,9 @@ class ControlUnit:
             self.data_path.memory_pointer = operation.address
         elif isinstance(operation, StackOperation):
             self.data_path.stack_pointer = self.data_path.alu_execute(
-                operation=ALUOperation.ADD
+                operation=ALUOperation.SUB
                 if operation.code is StackOperation.Code.PUSH
-                else ALUOperation.SUB,
+                else ALUOperation.ADD,
                 left=self.data_path.stack_pointer,
                 right=1,
                 flags=False,
