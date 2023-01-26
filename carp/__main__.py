@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 from typing import Optional
 
-from typer import Typer, FileText, Argument
+from typer import Typer, FileText, Argument, Option
 
 from common.errors import TranslationError
 from common.operations import Operation
@@ -15,9 +15,9 @@ app = Typer()
 
 @app.command()
 def translate(
-    input_file: FileText,
-    output_path: Optional[Path] = Argument(None),
-    save_parsed: bool = False,
+    input_file: FileText = Argument(..., help="Path to the source file"),
+    output_path: Optional[Path] = Argument(None, help="Path for the output"),
+    save_parsed: bool = Option(False, help="Saves parsed symbols to a file as well"),
 ) -> None:
     input_path = input_file.name.rpartition(".")[0]
     if output_path is None:
