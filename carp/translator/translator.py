@@ -146,6 +146,78 @@ class Translator:
                 BinaryOperation(code=operation_type, left=RB),
             )
 
+    def translate_output(self) -> None:
+        itoc: Value = Value(value=48)
+        self.extend_result(  # handling zero
+            JumpOperation(code=JumpOperation.Code.JUMP_ZERO, offset=1),
+            JumpOperation(code=JumpOperation.Code.JUMP_BECAUSE, offset=3),
+            BinaryOperation(code=BinaryOperation.Code.MATH_ADD, left=itoc),
+            MemoryOperation(
+                code=MemoryOperation.Code.SAVE_MEMORY,
+                address=OUTPUT_ADDRESS,
+            ),
+            JumpOperation(code=JumpOperation.Code.JUMP_BECAUSE, offset=17),
+        )
+        self.extend_result(  # handling negative
+            JumpOperation(code=JumpOperation.Code.JUMP_NEGATIVE, offset=1),
+            JumpOperation(code=JumpOperation.Code.JUMP_BECAUSE, offset=3),
+            BinaryOperation(
+                code=BinaryOperation.Code.MOVE_DATA,
+                right=RB,
+                left=Value(value=45),
+            ),
+            MemoryOperation(
+                code=MemoryOperation.Code.SAVE_MEMORY,
+                right=RB,
+                address=OUTPUT_ADDRESS,
+            ),
+            BinaryOperation(
+                code=BinaryOperation.Code.MATH_MUL,
+                left=Value(value=-1),
+            ),
+        )
+        self.extend_result(  # null-termination
+            BinaryOperation(
+                code=BinaryOperation.Code.MOVE_DATA,
+                right=RB,
+                left=Value(value=0),
+            ),
+            StackOperation(code=StackOperation.Code.PUSH, right=RB),
+        )
+        self.extend_result(  # main loop
+            BinaryOperation(
+                code=BinaryOperation.Code.MOVE_DATA,
+                right=RB,
+                left=RA,
+            ),
+            JumpOperation(code=JumpOperation.Code.JUMP_ZERO, offset=5),
+            BinaryOperation(
+                code=BinaryOperation.Code.MATH_MOD,
+                right=RB,
+                left=Value(value=10),
+            ),
+            BinaryOperation(
+                code=BinaryOperation.Code.MATH_ADD,
+                right=RB,
+                left=itoc,
+            ),
+            StackOperation(code=StackOperation.Code.PUSH, right=RB),
+            BinaryOperation(
+                code=BinaryOperation.Code.MATH_DIV,
+                left=Value(value=10),
+            ),
+            JumpOperation(code=JumpOperation.Code.JUMP_BECAUSE, offset=-7),
+        )
+        self.extend_result(  # printing loop
+            StackOperation(code=StackOperation.Code.GRAB),
+            JumpOperation(code=JumpOperation.Code.JUMP_ZERO, offset=2),
+            MemoryOperation(
+                code=MemoryOperation.Code.SAVE_MEMORY,
+                address=OUTPUT_ADDRESS,
+            ),
+            JumpOperation(code=JumpOperation.Code.JUMP_BECAUSE, offset=-4),
+        )
+
     def translate_command(self) -> None:
         header = self.reader.next_expression().text[1:]
 
@@ -158,6 +230,9 @@ class Translator:
                     ),
                     allow_strings=True,
                 )
+            case "output":
+                self.translate_argument()
+                self.translate_output()
             case "assign":
                 var_name = self.reader.next().text
                 location = self.variables.register(var_name)

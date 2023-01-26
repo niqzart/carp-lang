@@ -18,7 +18,7 @@ def check_output(*args: str) -> str:
     [
         pytest.param("hello", False, "Hello World", id="hello"),
         pytest.param("cat", True, None, id="cat"),
-        pytest.param("prob2", False, "", id="prob2"),
+        pytest.param("prob2", False, "4613732", id="prob2"),
     ],
 )
 def test_one(program_name: str, file_in: bool, expected: str | None):
