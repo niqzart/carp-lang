@@ -1,0 +1,13 @@
+(assign a 1)
+(assign b 2)
+(assign result 2)
+(loop
+  (< b 4000000)
+  (assign next (+ a b))
+  (assign a b)
+  (assign b next)
+  (if
+    (= (% next 2) 0)
+    (assign result (+ result next))
+  )
+)

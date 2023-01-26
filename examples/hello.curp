@@ -1,0 +1,173 @@
+[
+  {
+    "code": "mov",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "left": {
+      "type": "value",
+      "value": 101
+    }
+  },
+  {
+    "code": "save",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 3
+  },
+  {
+    "code": "mov",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "left": {
+      "type": "value",
+      "value": 108
+    }
+  },
+  {
+    "code": "save",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 3
+  },
+  {
+    "code": "mov",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "left": {
+      "type": "value",
+      "value": 108
+    }
+  },
+  {
+    "code": "save",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 3
+  },
+  {
+    "code": "mov",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "left": {
+      "type": "value",
+      "value": 111
+    }
+  },
+  {
+    "code": "save",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 3
+  },
+  {
+    "code": "mov",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "left": {
+      "type": "value",
+      "value": 32
+    }
+  },
+  {
+    "code": "save",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 3
+  },
+  {
+    "code": "mov",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "left": {
+      "type": "value",
+      "value": 87
+    }
+  },
+  {
+    "code": "save",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 3
+  },
+  {
+    "code": "mov",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "left": {
+      "type": "value",
+      "value": 111
+    }
+  },
+  {
+    "code": "save",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 3
+  },
+  {
+    "code": "mov",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "left": {
+      "type": "value",
+      "value": 114
+    }
+  },
+  {
+    "code": "save",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 3
+  },
+  {
+    "code": "mov",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "left": {
+      "type": "value",
+      "value": 108
+    }
+  },
+  {
+    "code": "save",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 3
+  }
+]

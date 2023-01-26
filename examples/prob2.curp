@@ -1,0 +1,230 @@
+[
+  {
+    "code": "mov",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "left": {
+      "type": "value",
+      "value": 1
+    }
+  },
+  {
+    "code": "save",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 16
+  },
+  {
+    "code": "mov",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "left": {
+      "type": "value",
+      "value": 2
+    }
+  },
+  {
+    "code": "save",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 17
+  },
+  {
+    "code": "mov",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "left": {
+      "type": "value",
+      "value": 2
+    }
+  },
+  {
+    "code": "save",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 18
+  },
+  {
+    "code": "load",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 17
+  },
+  {
+    "code": "cmp",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "left": {
+      "type": "value",
+      "value": 4000000
+    }
+  },
+  {
+    "code": "jn",
+    "offset": 1
+  },
+  {
+    "code": "jb",
+    "offset": 18
+  },
+  {
+    "code": "load",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 16
+  },
+  {
+    "code": "load",
+    "right": {
+      "type": "registry",
+      "code": "B"
+    },
+    "address": 17
+  },
+  {
+    "code": "add",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "left": {
+      "type": "registry",
+      "code": "B"
+    }
+  },
+  {
+    "code": "save",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 19
+  },
+  {
+    "code": "load",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 17
+  },
+  {
+    "code": "save",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 16
+  },
+  {
+    "code": "load",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 19
+  },
+  {
+    "code": "save",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 17
+  },
+  {
+    "code": "load",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 19
+  },
+  {
+    "code": "mod",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "left": {
+      "type": "value",
+      "value": 2
+    }
+  },
+  {
+    "code": "cmp",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "left": {
+      "type": "value",
+      "value": 0
+    }
+  },
+  {
+    "code": "jz",
+    "offset": 1
+  },
+  {
+    "code": "jb",
+    "offset": 4
+  },
+  {
+    "code": "load",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 18
+  },
+  {
+    "code": "load",
+    "right": {
+      "type": "registry",
+      "code": "B"
+    },
+    "address": 19
+  },
+  {
+    "code": "add",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "left": {
+      "type": "registry",
+      "code": "B"
+    }
+  },
+  {
+    "code": "save",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 18
+  },
+  {
+    "code": "jb",
+    "offset": -22
+  }
+]

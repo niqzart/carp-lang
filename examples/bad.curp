@@ -1,0 +1,18 @@
+[
+  {
+    "code": "load",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 1
+  },
+  {
+    "code": "save",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 3
+  }
+]
