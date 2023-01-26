@@ -2,10 +2,13 @@ import json
 from pathlib import Path
 from typing import Optional
 
+from pydantic import parse_raw_as
 from typer import Typer, FileText, Argument, Option
 
 from common.errors import TranslationError
 from common.operations import Operation
+from executor.control import ControlUnit
+from executor.wiring import DataPath
 from translator.parser import ParserError
 from translator.reader import Reader
 from translator.translator import Translator
@@ -31,7 +34,7 @@ def translate(
             parsed = [symbol.dict() for symbol in reader.symbols]
             with open(input_path + ".cpar", "w") as f:
                 json.dump(parsed, f, indent=2)
-            print("Parsing result saved")
+            print(f"Parsing result saved to {input_path}.cpar")
     except ParserError as e:
         print(str(e))
 
@@ -53,6 +56,35 @@ def translate(
             f"({symbol.text}): {e}"
         )
         raise e
+
+
+@app.command()
+def execute(
+    instructions: FileText = Argument(..., help="Path to the compiled code file"),
+    input_string: Optional[FileText] = Argument(None, help="Path for the input data"),
+    output_path: Optional[Path] = Argument(None, help="Path for the output data"),
+    save_log: bool = Option(False, help="Saves the execution logs to a file"),
+) -> None:
+    operations: list[Operation] = parse_raw_as(list[Operation], instructions.read())
+    if input_string is None:
+        input_data = []
+    else:
+        input_data = [ord(char) for char in input_string.read()]
+
+    data_path = DataPath(
+        data_memory_size=100,
+        instruction_memory=operations,
+        input_data=input_data
+    )
+    control = ControlUnit(data_path)
+    control.main()
+    print("".join(chr(i) for i in data_path.get_output()))
+
+    if save_log:
+        log_path = instructions.name.rpartition(".")[0] + ".clog"
+        with open(log_path, "w") as f:
+            json.dump([record.dict() for record in control.log], f, indent=2)
+        print(f"Execution log saved to {log_path}")
 
 
 @app.command()
