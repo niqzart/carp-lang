@@ -7,6 +7,25 @@
     },
     "left": {
       "type": "value",
+      "value": 72
+    }
+  },
+  {
+    "code": "save",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 3
+  },
+  {
+    "code": "mov",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "left": {
+      "type": "value",
       "value": 101
     }
   },
@@ -160,6 +179,25 @@
     "left": {
       "type": "value",
       "value": 108
+    }
+  },
+  {
+    "code": "save",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 3
+  },
+  {
+    "code": "mov",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "left": {
+      "type": "value",
+      "value": 100
     }
   },
   {
