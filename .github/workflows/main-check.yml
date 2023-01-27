@@ -39,5 +39,10 @@ jobs:
 
       - id: isort
         if: success() || (failure() && steps.install.conclusion == 'success')
-        name: Run isort
+        name: Check import ordering with isort
         run: isort carp --check --diff
+
+      - id: black
+        if: success() || (failure() && steps.install.conclusion == 'success')
+        name: Check formatting with black
+        run: black carp --check

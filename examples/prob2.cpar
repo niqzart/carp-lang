@@ -243,5 +243,20 @@
     "text": ")",
     "line": 13,
     "char": 1
+  },
+  {
+    "text": "(output",
+    "line": 14,
+    "char": 0
+  },
+  {
+    "text": "result",
+    "line": 14,
+    "char": 8
+  },
+  {
+    "text": ")",
+    "line": 14,
+    "char": 15
   }
 ]

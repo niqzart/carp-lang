@@ -40,7 +40,7 @@ def randomize_spaces(string: str) -> str:
         pytest.param(
             "(print (input))", ["(print", "(input", ")", ")"], id="repeating_bracket"
         ),
-    ]
+    ],
 )
 def test_parsing_splits(random_spaces: bool, source: str, expected: list[str]):
     if random_spaces:
@@ -58,7 +58,7 @@ def test_parsing_splits(random_spaces: bool, source: str, expected: list[str]):
         pytest.param("(input", True, False, False, id="expression"),
         pytest.param('"hello"', False, True, False, id="quoted"),
         pytest.param(")", False, False, True, id="closing"),
-    ]
+    ],
 )
 def test_symbols(symbol_text: str, expression: bool, quoted: bool, closing: bool):
     symbol = Symbol(text=symbol_text, line=0, char=0)
@@ -73,10 +73,10 @@ def test_symbols(symbol_text: str, expression: bool, quoted: bool, closing: bool
     (
         pytest.param(
             '"hey',
-            'Parsing error occurred: Missing closing quotation mark',
+            "Parsing error occurred: Missing closing quotation mark",
             id="missing_quotation",
         ),
-    )
+    ),
 )
 def test_errors(source: str, exception_text: str):
     with pytest.raises(ParserError) as e:

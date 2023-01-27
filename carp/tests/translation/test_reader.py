@@ -17,7 +17,7 @@ def assert_back(reader: Reader) -> None:
         pytest.param("hello", False, False, id="normal"),
         pytest.param("(input", True, False, id="expression"),
         pytest.param(")", False, True, id="closing"),
-    ]
+    ],
 )
 def test_reader(source: str, expression: bool, closing: bool):
     reader = Reader(source)

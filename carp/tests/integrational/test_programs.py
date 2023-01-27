@@ -7,10 +7,12 @@ EXAMPLE_FOLDER: Path = Path("examples")
 
 
 def check_output(*args: str) -> str:
-    return subprocess.check_output(
-        ["python", "carp", *args],
-        cwd="./.."
-    ).decode("utf-8").strip().replace("\r\n", "\n")
+    return (
+        subprocess.check_output(["python", "carp", *args], cwd="./..")
+        .decode("utf-8")
+        .strip()
+        .replace("\r\n", "\n")
+    )
 
 
 @pytest.mark.parametrize(
@@ -18,7 +20,7 @@ def check_output(*args: str) -> str:
     [
         pytest.param("hello", False, "Hello World", id="hello"),
         pytest.param("cat", True, None, id="cat"),
-        pytest.param("prob2", False, "", id="prob2"),
+        pytest.param("prob2", False, "4613732", id="prob2"),
     ],
 )
 def test_one(program_name: str, file_in: bool, expected: str | None):

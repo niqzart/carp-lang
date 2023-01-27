@@ -1,0 +1,31 @@
+: output <arg>
+
+load A <arg>
+
+jz 1
+jb 3
+  add A 48  # ord("0")
+  save A >
+  jb 17
+
+jn 1
+jb 3
+  mov B 45  # ord("-")
+  save B >
+  mul A -1
+
+mov B 0
+push B
+
+mov B A
+jz 5
+  mod B 10
+  add B 48  # ord("0")
+  push B
+  div A 10
+jb -7
+
+grab A
+jz 2
+  save A >
+jb -4

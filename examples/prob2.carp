@@ -11,3 +11,4 @@
     (assign result (+ result next))
   )
 )
+(output result)
