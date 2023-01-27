@@ -1,0 +1,69 @@
+[
+  {
+    "code": "mov",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "left": {
+      "type": "value",
+      "value": 1
+    }
+  },
+  {
+    "code": "save",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 16
+  },
+  {
+    "code": "load",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 16
+  },
+  {
+    "code": "jz",
+    "offset": 5
+  },
+  {
+    "code": "load",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 1
+  },
+  {
+    "code": "save",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 16
+  },
+  {
+    "code": "load",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 16
+  },
+  {
+    "code": "save",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 3
+  },
+  {
+    "code": "jb",
+    "offset": -6
+  }
+]

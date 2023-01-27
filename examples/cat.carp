@@ -1,0 +1,6 @@
+(assign input 1)
+(loop
+  input
+  (assign input (input))
+  (print input)
+)
