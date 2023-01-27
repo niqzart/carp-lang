@@ -1,10 +1,10 @@
 import random
-from typing import Iterator
+from collections.abc import Iterator
 
 import pytest
 
-from carp.translator.reader import Parser
 from translator.parser import Symbol, ParserError
+from translator.reader import Parser
 
 
 def _randomize_spaces(string: str) -> Iterator[str]:

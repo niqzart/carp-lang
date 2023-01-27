@@ -1,0 +1,43 @@
+name: Common Pipeline Steps
+
+on:
+  push:
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+          cache: pip
+
+      - id: install
+        name: Install Requirements
+        run: pip install -r requirements-dev.txt
+
+      - name: Run pytest
+        run: |
+          cd carp
+          pytest tests -p no:cacheprovider --cov=.
+
+      - name: Report test coverage
+        if: inputs.coverage
+        run: coverage report --rcfile=../setup.cfg
+
+      - id: flake8
+        if: success() || (failure() && steps.install.conclusion == 'success')
+        name: Run flake8
+        run: flake8 --config=setup.cfg carp
+
+      - id: isort
+        if: success() || (failure() && steps.install.conclusion == 'success')
+        name: Run isort
+        run: isort carp --check --diff

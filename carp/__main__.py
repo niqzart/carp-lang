@@ -2,10 +2,13 @@ import json
 from pathlib import Path
 from typing import Optional
 
+from pydantic import parse_raw_as
 from typer import Typer, FileText, Argument, Option
 
 from common.errors import TranslationError
 from common.operations import Operation
+from executor.control import ControlUnit
+from executor.wiring import DataPath
 from translator.parser import ParserError
 from translator.reader import Reader
 from translator.translator import Translator
@@ -29,9 +32,9 @@ def translate(
         print("Parsing successful")
         if save_parsed:
             parsed = [symbol.dict() for symbol in reader.symbols]
-            with open(input_path + ".cpar", "w") as f:
+            with open(input_path + ".cpar", "w", encoding="utf-8") as f:
                 json.dump(parsed, f, indent=2)
-            print("Parsing result saved")
+            print(f"Parsing result saved to {input_path}.cpar")
     except ParserError as e:
         print(str(e))
 
@@ -40,7 +43,7 @@ def translate(
         translator.translate_blocks()
         compiled = [operation.dict() for operation in translator.result]
 
-        with open(output_path, "w") as f:
+        with open(output_path, "w", encoding="utf-8") as f:
             json.dump(compiled, f, indent=2)
         print("Compilation successful")
         print(f"Result has been saved to {output_path}")
@@ -48,18 +51,57 @@ def translate(
         translator.reader.back()
         symbol = translator.reader.current_or_closing()
         print(
-            f"Translation error occurred at "
-            f"{symbol.line}:{symbol.char} "
-            f"({symbol.text}): {e}"
+            "Translation error occurred at "
+            + f"{symbol.line}:{symbol.char} "
+            + f"({symbol.text}): {e}"
         )
         raise e
 
 
 @app.command()
-def generate_schema(output_path: Optional[Path] = Argument(None)):
+def execute(
+    instructions: FileText = Argument(..., help="Path to the compiled code file"),
+    input_string: Optional[FileText] = Argument(None, help="Path for the input data"),
+    output_path: Optional[Path] = Argument(None, help="Path for the output data"),
+    save_log: bool = Option(False, help="Saves the execution logs to a file"),
+) -> None:
+    operations: list[Operation] = parse_raw_as(list[Operation], instructions.read())
+    if input_string is None:
+        input_data = []
+    else:
+        input_data = [ord(char) for char in input_string.read()]
+
+    data_path = DataPath(
+        data_memory_size=100,
+        instruction_memory=operations,
+        input_data=input_data
+    )
+    control = ControlUnit(data_path)
+    try:
+        control.main()
+        result = "".join(chr(i) for i in data_path.get_output())
+        if output_path:
+            with open(output_path, "w", encoding="utf-8") as f:
+                f.write(result)
+        else:
+            print(result)
+    except RuntimeError as e:
+        control.save_state()
+        print(f"Error: {e}")
+        print("Run with --save-log to debug this")
+
+    if save_log:
+        log_path = instructions.name.rpartition(".")[0] + ".clog"
+        with open(log_path, "w", encoding="utf-8") as f:
+            json.dump([record.dict() for record in control.log], f, indent=2)
+        print(f"Execution log saved to {log_path}")
+
+
+@app.command()
+def generate_schema(output_path: Optional[Path] = Argument(None)) -> None:
     if output_path is None:
         output_path = "docs/operation-schema.json"
-    with open(output_path, "w") as f:
+    with open(output_path, "w", encoding="utf-8") as f:
         json.dump(Operation.schema(), f, indent=2)
 
 

@@ -1,0 +1,557 @@
+[
+  {
+    "registries": {
+      "accumulator": 0,
+      "buffer": 0,
+      "memory_pointer": 0,
+      "stack_pointer": 100,
+      "instruction_pointer": 0,
+      "command_data": null
+    },
+    "flags": {
+      "zero": true,
+      "negative": false
+    },
+    "input": null,
+    "output": null
+  },
+  {
+    "registries": {
+      "accumulator": 72,
+      "buffer": 0,
+      "memory_pointer": 0,
+      "stack_pointer": 100,
+      "instruction_pointer": 1,
+      "command_data": {
+        "code": "mov",
+        "right": {
+          "type": "registry",
+          "code": "A"
+        },
+        "left": {
+          "type": "value",
+          "value": 72
+        }
+      }
+    },
+    "flags": {
+      "zero": false,
+      "negative": false
+    },
+    "input": null,
+    "output": null
+  },
+  {
+    "registries": {
+      "accumulator": 72,
+      "buffer": 0,
+      "memory_pointer": 3,
+      "stack_pointer": 100,
+      "instruction_pointer": 2,
+      "command_data": {
+        "code": "save",
+        "right": {
+          "type": "registry",
+          "code": "A"
+        },
+        "address": 3
+      }
+    },
+    "flags": {
+      "zero": false,
+      "negative": false
+    },
+    "input": null,
+    "output": 72
+  },
+  {
+    "registries": {
+      "accumulator": 101,
+      "buffer": 0,
+      "memory_pointer": 3,
+      "stack_pointer": 100,
+      "instruction_pointer": 3,
+      "command_data": {
+        "code": "mov",
+        "right": {
+          "type": "registry",
+          "code": "A"
+        },
+        "left": {
+          "type": "value",
+          "value": 101
+        }
+      }
+    },
+    "flags": {
+      "zero": false,
+      "negative": false
+    },
+    "input": null,
+    "output": null
+  },
+  {
+    "registries": {
+      "accumulator": 101,
+      "buffer": 0,
+      "memory_pointer": 3,
+      "stack_pointer": 100,
+      "instruction_pointer": 4,
+      "command_data": {
+        "code": "save",
+        "right": {
+          "type": "registry",
+          "code": "A"
+        },
+        "address": 3
+      }
+    },
+    "flags": {
+      "zero": false,
+      "negative": false
+    },
+    "input": null,
+    "output": 101
+  },
+  {
+    "registries": {
+      "accumulator": 108,
+      "buffer": 0,
+      "memory_pointer": 3,
+      "stack_pointer": 100,
+      "instruction_pointer": 5,
+      "command_data": {
+        "code": "mov",
+        "right": {
+          "type": "registry",
+          "code": "A"
+        },
+        "left": {
+          "type": "value",
+          "value": 108
+        }
+      }
+    },
+    "flags": {
+      "zero": false,
+      "negative": false
+    },
+    "input": null,
+    "output": null
+  },
+  {
+    "registries": {
+      "accumulator": 108,
+      "buffer": 0,
+      "memory_pointer": 3,
+      "stack_pointer": 100,
+      "instruction_pointer": 6,
+      "command_data": {
+        "code": "save",
+        "right": {
+          "type": "registry",
+          "code": "A"
+        },
+        "address": 3
+      }
+    },
+    "flags": {
+      "zero": false,
+      "negative": false
+    },
+    "input": null,
+    "output": 108
+  },
+  {
+    "registries": {
+      "accumulator": 108,
+      "buffer": 0,
+      "memory_pointer": 3,
+      "stack_pointer": 100,
+      "instruction_pointer": 7,
+      "command_data": {
+        "code": "mov",
+        "right": {
+          "type": "registry",
+          "code": "A"
+        },
+        "left": {
+          "type": "value",
+          "value": 108
+        }
+      }
+    },
+    "flags": {
+      "zero": false,
+      "negative": false
+    },
+    "input": null,
+    "output": null
+  },
+  {
+    "registries": {
+      "accumulator": 108,
+      "buffer": 0,
+      "memory_pointer": 3,
+      "stack_pointer": 100,
+      "instruction_pointer": 8,
+      "command_data": {
+        "code": "save",
+        "right": {
+          "type": "registry",
+          "code": "A"
+        },
+        "address": 3
+      }
+    },
+    "flags": {
+      "zero": false,
+      "negative": false
+    },
+    "input": null,
+    "output": 108
+  },
+  {
+    "registries": {
+      "accumulator": 111,
+      "buffer": 0,
+      "memory_pointer": 3,
+      "stack_pointer": 100,
+      "instruction_pointer": 9,
+      "command_data": {
+        "code": "mov",
+        "right": {
+          "type": "registry",
+          "code": "A"
+        },
+        "left": {
+          "type": "value",
+          "value": 111
+        }
+      }
+    },
+    "flags": {
+      "zero": false,
+      "negative": false
+    },
+    "input": null,
+    "output": null
+  },
+  {
+    "registries": {
+      "accumulator": 111,
+      "buffer": 0,
+      "memory_pointer": 3,
+      "stack_pointer": 100,
+      "instruction_pointer": 10,
+      "command_data": {
+        "code": "save",
+        "right": {
+          "type": "registry",
+          "code": "A"
+        },
+        "address": 3
+      }
+    },
+    "flags": {
+      "zero": false,
+      "negative": false
+    },
+    "input": null,
+    "output": 111
+  },
+  {
+    "registries": {
+      "accumulator": 32,
+      "buffer": 0,
+      "memory_pointer": 3,
+      "stack_pointer": 100,
+      "instruction_pointer": 11,
+      "command_data": {
+        "code": "mov",
+        "right": {
+          "type": "registry",
+          "code": "A"
+        },
+        "left": {
+          "type": "value",
+          "value": 32
+        }
+      }
+    },
+    "flags": {
+      "zero": false,
+      "negative": false
+    },
+    "input": null,
+    "output": null
+  },
+  {
+    "registries": {
+      "accumulator": 32,
+      "buffer": 0,
+      "memory_pointer": 3,
+      "stack_pointer": 100,
+      "instruction_pointer": 12,
+      "command_data": {
+        "code": "save",
+        "right": {
+          "type": "registry",
+          "code": "A"
+        },
+        "address": 3
+      }
+    },
+    "flags": {
+      "zero": false,
+      "negative": false
+    },
+    "input": null,
+    "output": 32
+  },
+  {
+    "registries": {
+      "accumulator": 87,
+      "buffer": 0,
+      "memory_pointer": 3,
+      "stack_pointer": 100,
+      "instruction_pointer": 13,
+      "command_data": {
+        "code": "mov",
+        "right": {
+          "type": "registry",
+          "code": "A"
+        },
+        "left": {
+          "type": "value",
+          "value": 87
+        }
+      }
+    },
+    "flags": {
+      "zero": false,
+      "negative": false
+    },
+    "input": null,
+    "output": null
+  },
+  {
+    "registries": {
+      "accumulator": 87,
+      "buffer": 0,
+      "memory_pointer": 3,
+      "stack_pointer": 100,
+      "instruction_pointer": 14,
+      "command_data": {
+        "code": "save",
+        "right": {
+          "type": "registry",
+          "code": "A"
+        },
+        "address": 3
+      }
+    },
+    "flags": {
+      "zero": false,
+      "negative": false
+    },
+    "input": null,
+    "output": 87
+  },
+  {
+    "registries": {
+      "accumulator": 111,
+      "buffer": 0,
+      "memory_pointer": 3,
+      "stack_pointer": 100,
+      "instruction_pointer": 15,
+      "command_data": {
+        "code": "mov",
+        "right": {
+          "type": "registry",
+          "code": "A"
+        },
+        "left": {
+          "type": "value",
+          "value": 111
+        }
+      }
+    },
+    "flags": {
+      "zero": false,
+      "negative": false
+    },
+    "input": null,
+    "output": null
+  },
+  {
+    "registries": {
+      "accumulator": 111,
+      "buffer": 0,
+      "memory_pointer": 3,
+      "stack_pointer": 100,
+      "instruction_pointer": 16,
+      "command_data": {
+        "code": "save",
+        "right": {
+          "type": "registry",
+          "code": "A"
+        },
+        "address": 3
+      }
+    },
+    "flags": {
+      "zero": false,
+      "negative": false
+    },
+    "input": null,
+    "output": 111
+  },
+  {
+    "registries": {
+      "accumulator": 114,
+      "buffer": 0,
+      "memory_pointer": 3,
+      "stack_pointer": 100,
+      "instruction_pointer": 17,
+      "command_data": {
+        "code": "mov",
+        "right": {
+          "type": "registry",
+          "code": "A"
+        },
+        "left": {
+          "type": "value",
+          "value": 114
+        }
+      }
+    },
+    "flags": {
+      "zero": false,
+      "negative": false
+    },
+    "input": null,
+    "output": null
+  },
+  {
+    "registries": {
+      "accumulator": 114,
+      "buffer": 0,
+      "memory_pointer": 3,
+      "stack_pointer": 100,
+      "instruction_pointer": 18,
+      "command_data": {
+        "code": "save",
+        "right": {
+          "type": "registry",
+          "code": "A"
+        },
+        "address": 3
+      }
+    },
+    "flags": {
+      "zero": false,
+      "negative": false
+    },
+    "input": null,
+    "output": 114
+  },
+  {
+    "registries": {
+      "accumulator": 108,
+      "buffer": 0,
+      "memory_pointer": 3,
+      "stack_pointer": 100,
+      "instruction_pointer": 19,
+      "command_data": {
+        "code": "mov",
+        "right": {
+          "type": "registry",
+          "code": "A"
+        },
+        "left": {
+          "type": "value",
+          "value": 108
+        }
+      }
+    },
+    "flags": {
+      "zero": false,
+      "negative": false
+    },
+    "input": null,
+    "output": null
+  },
+  {
+    "registries": {
+      "accumulator": 108,
+      "buffer": 0,
+      "memory_pointer": 3,
+      "stack_pointer": 100,
+      "instruction_pointer": 20,
+      "command_data": {
+        "code": "save",
+        "right": {
+          "type": "registry",
+          "code": "A"
+        },
+        "address": 3
+      }
+    },
+    "flags": {
+      "zero": false,
+      "negative": false
+    },
+    "input": null,
+    "output": 108
+  },
+  {
+    "registries": {
+      "accumulator": 100,
+      "buffer": 0,
+      "memory_pointer": 3,
+      "stack_pointer": 100,
+      "instruction_pointer": 21,
+      "command_data": {
+        "code": "mov",
+        "right": {
+          "type": "registry",
+          "code": "A"
+        },
+        "left": {
+          "type": "value",
+          "value": 100
+        }
+      }
+    },
+    "flags": {
+      "zero": false,
+      "negative": false
+    },
+    "input": null,
+    "output": null
+  },
+  {
+    "registries": {
+      "accumulator": 100,
+      "buffer": 0,
+      "memory_pointer": 3,
+      "stack_pointer": 100,
+      "instruction_pointer": 22,
+      "command_data": {
+        "code": "save",
+        "right": {
+          "type": "registry",
+          "code": "A"
+        },
+        "address": 3
+      }
+    },
+    "flags": {
+      "zero": false,
+      "negative": false
+    },
+    "input": null,
+    "output": 100
+  }
+]

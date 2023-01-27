@@ -1,4 +1,4 @@
-from typing import Iterator
+from collections.abc import Iterator
 
 from pydantic import BaseModel
 
@@ -33,7 +33,7 @@ class Symbol(BaseModel):
 
 
 class ParserError(Exception):
-    def __init__(self, text: str):
+    def __init__(self, text: str) -> None:
         self.text: str = text
 
     def __str__(self) -> str:
@@ -46,7 +46,7 @@ class Parser:
     list of :py:class:`Symbol`. Used in :py:class:`translator.reader.Reader`
     """
 
-    def __init__(self, data: str):
+    def __init__(self, data: str) -> None:
         self.data: str = data
         self.result: list[Symbol] = []
 
@@ -64,7 +64,8 @@ class Parser:
         self.parse_all()
 
     def iterate_chars(self) -> Iterator[str]:
-        for self.position, char in enumerate(self.data):
+        for i, char in enumerate(self.data):
+            self.position = i
             if not self.in_quotes:
                 if char == ")":
                     self.back_brackets += 1
@@ -102,7 +103,7 @@ class Parser:
         prev_in_spaces: bool = True
 
         for char in self.iterate_chars():
-            in_spaces = char in [" ", "\n", "\t"]
+            in_spaces = char in {" ", "\n", "\t"}
             if prev_in_spaces and not in_spaces:
                 self.started_position = self.position
                 self.started_line_number = self.line_number

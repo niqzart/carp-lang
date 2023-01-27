@@ -1,9 +1,6 @@
 from pydantic import BaseModel
 
-from common.operations import (
-    BinaryOperation,
-    JumpOperation,
-)
+from common.operations import BinaryOperation, JumpOperation
 
 
 class ComparatorData(BaseModel):
@@ -14,7 +11,7 @@ class ComparatorData(BaseModel):
 
 class ComparatorTemplate(BaseModel):
     zero: bool
-    reversed: bool = False
+    reverse: bool = False
     negated: bool
 
     @property
@@ -24,7 +21,7 @@ class ComparatorTemplate(BaseModel):
             if self.zero
             else JumpOperation.Code.JUMP_NEGATIVE,
             command=BinaryOperation.Code.COMPARE_REVERSE
-            if self.reversed
+            if self.reverse
             else BinaryOperation.Code.COMPARE,
             negated=self.negated,
         )
@@ -37,10 +34,10 @@ class ComparatorTemplate(BaseModel):
 # (< a b) -> (!jn (comp a b)) -> jn +1; jb +skip
 # (!= a b) -> (jz (comp a b)) -> jn +skip
 SYMBOL_TO_COMPARATOR: dict[str, ComparatorTemplate] = {
-    ">=": ComparatorTemplate(zero=False, reversed=False, negated=False),
-    "<": ComparatorTemplate(zero=False, reversed=False, negated=True),
-    "<=": ComparatorTemplate(zero=False, reversed=True, negated=False),
-    ">": ComparatorTemplate(zero=False, reversed=True, negated=True),
+    ">=": ComparatorTemplate(zero=False, reverse=False, negated=False),
+    "<": ComparatorTemplate(zero=False, reverse=False, negated=True),
+    "<=": ComparatorTemplate(zero=False, reverse=True, negated=False),
+    ">": ComparatorTemplate(zero=False, reverse=True, negated=True),
     "=": ComparatorTemplate(zero=True, negated=True),
     "!=": ComparatorTemplate(zero=True, negated=True),
 }

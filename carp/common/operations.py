@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 
 class Operand(BaseModel):
-    type: str
+    type: str  # noqa: A003 VNE003
 
 
 class Registry(Operand):
@@ -13,7 +13,7 @@ class Registry(Operand):
         ACCUMULATOR = "A"
         BUFFER = "B"
 
-    type: Literal["registry"] = "registry"
+    type: Literal["registry"] = "registry"  # noqa: A003 VNE003
     code: Code
 
 
@@ -22,7 +22,7 @@ RB: Registry = Registry(code=Registry.Code.BUFFER)
 
 
 class Value(Operand):
-    type: Literal["value"] = "value"
+    type: Literal["value"] = "value"  # noqa: A003 VNE003
     value: int
 
 

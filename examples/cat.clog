@@ -1,0 +1,262 @@
+[
+  {
+    "registries": {
+      "accumulator": 0,
+      "buffer": 0,
+      "memory_pointer": 0,
+      "stack_pointer": 100,
+      "instruction_pointer": 0,
+      "command_data": null
+    },
+    "flags": {
+      "zero": true,
+      "negative": false
+    },
+    "input": null,
+    "output": null
+  },
+  {
+    "registries": {
+      "accumulator": 1,
+      "buffer": 0,
+      "memory_pointer": 0,
+      "stack_pointer": 100,
+      "instruction_pointer": 1,
+      "command_data": {
+        "code": "mov",
+        "right": {
+          "type": "registry",
+          "code": "A"
+        },
+        "left": {
+          "type": "value",
+          "value": 1
+        }
+      }
+    },
+    "flags": {
+      "zero": false,
+      "negative": false
+    },
+    "input": null,
+    "output": null
+  },
+  {
+    "registries": {
+      "accumulator": 1,
+      "buffer": 0,
+      "memory_pointer": 16,
+      "stack_pointer": 100,
+      "instruction_pointer": 2,
+      "command_data": {
+        "code": "save",
+        "right": {
+          "type": "registry",
+          "code": "A"
+        },
+        "address": 16
+      }
+    },
+    "flags": {
+      "zero": false,
+      "negative": false
+    },
+    "input": null,
+    "output": null
+  },
+  {
+    "registries": {
+      "accumulator": 1,
+      "buffer": 0,
+      "memory_pointer": 16,
+      "stack_pointer": 100,
+      "instruction_pointer": 3,
+      "command_data": {
+        "code": "load",
+        "right": {
+          "type": "registry",
+          "code": "A"
+        },
+        "address": 16
+      }
+    },
+    "flags": {
+      "zero": false,
+      "negative": false
+    },
+    "input": null,
+    "output": null
+  },
+  {
+    "registries": {
+      "accumulator": 1,
+      "buffer": 0,
+      "memory_pointer": 16,
+      "stack_pointer": 100,
+      "instruction_pointer": 4,
+      "command_data": {
+        "code": "jz",
+        "offset": 5
+      }
+    },
+    "flags": {
+      "zero": false,
+      "negative": false
+    },
+    "input": null,
+    "output": null
+  },
+  {
+    "registries": {
+      "accumulator": 0,
+      "buffer": 0,
+      "memory_pointer": 1,
+      "stack_pointer": 100,
+      "instruction_pointer": 5,
+      "command_data": {
+        "code": "load",
+        "right": {
+          "type": "registry",
+          "code": "A"
+        },
+        "address": 1
+      }
+    },
+    "flags": {
+      "zero": true,
+      "negative": false
+    },
+    "input": 0,
+    "output": null
+  },
+  {
+    "registries": {
+      "accumulator": 0,
+      "buffer": 0,
+      "memory_pointer": 16,
+      "stack_pointer": 100,
+      "instruction_pointer": 6,
+      "command_data": {
+        "code": "save",
+        "right": {
+          "type": "registry",
+          "code": "A"
+        },
+        "address": 16
+      }
+    },
+    "flags": {
+      "zero": true,
+      "negative": false
+    },
+    "input": null,
+    "output": null
+  },
+  {
+    "registries": {
+      "accumulator": 0,
+      "buffer": 0,
+      "memory_pointer": 16,
+      "stack_pointer": 100,
+      "instruction_pointer": 7,
+      "command_data": {
+        "code": "load",
+        "right": {
+          "type": "registry",
+          "code": "A"
+        },
+        "address": 16
+      }
+    },
+    "flags": {
+      "zero": true,
+      "negative": false
+    },
+    "input": null,
+    "output": null
+  },
+  {
+    "registries": {
+      "accumulator": 0,
+      "buffer": 0,
+      "memory_pointer": 3,
+      "stack_pointer": 100,
+      "instruction_pointer": 8,
+      "command_data": {
+        "code": "save",
+        "right": {
+          "type": "registry",
+          "code": "A"
+        },
+        "address": 3
+      }
+    },
+    "flags": {
+      "zero": true,
+      "negative": false
+    },
+    "input": null,
+    "output": 0
+  },
+  {
+    "registries": {
+      "accumulator": 0,
+      "buffer": 0,
+      "memory_pointer": 3,
+      "stack_pointer": 100,
+      "instruction_pointer": 2,
+      "command_data": {
+        "code": "jb",
+        "offset": -7
+      }
+    },
+    "flags": {
+      "zero": true,
+      "negative": false
+    },
+    "input": null,
+    "output": null
+  },
+  {
+    "registries": {
+      "accumulator": 0,
+      "buffer": 0,
+      "memory_pointer": 16,
+      "stack_pointer": 100,
+      "instruction_pointer": 3,
+      "command_data": {
+        "code": "load",
+        "right": {
+          "type": "registry",
+          "code": "A"
+        },
+        "address": 16
+      }
+    },
+    "flags": {
+      "zero": true,
+      "negative": false
+    },
+    "input": null,
+    "output": null
+  },
+  {
+    "registries": {
+      "accumulator": 0,
+      "buffer": 0,
+      "memory_pointer": 16,
+      "stack_pointer": 100,
+      "instruction_pointer": 9,
+      "command_data": {
+        "code": "jz",
+        "offset": 5
+      }
+    },
+    "flags": {
+      "zero": true,
+      "negative": false
+    },
+    "input": null,
+    "output": null
+  }
+]

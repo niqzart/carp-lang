@@ -30,14 +30,14 @@ class Reader:
     def next_or_none(self) -> Symbol:
         result = self.current_or_none()
         self.position += 1
-        return result
+        return result  # noqa: R504  # flake bug
 
     def next_or_closing(self) -> Symbol:
         result = self.current_or_closing()
         self.position += 1
-        return result
+        return result  # noqa: R504  # flake bug
 
-    def next(self) -> Symbol:
+    def next(self) -> Symbol:  # noqa: A003
         result = self.next_or_closing()
         if result.is_closing:
             raise TranslationError("Unexpected closing symbol")

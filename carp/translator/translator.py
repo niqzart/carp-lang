@@ -11,8 +11,8 @@ from common.operations import (
     JumpOperation,
     OPERATOR_TO_CODE,
 )
-from translator.reader import Reader, Symbol
 from translator.comparators import SYMBOL_TO_COMPARATOR
+from translator.reader import Reader, Symbol
 from translator.variables import VariableIndex, VarDef
 
 
@@ -34,6 +34,9 @@ class Translator:
 
     def check_closed_bracket(self) -> None:
         self.reader.next_closing()
+
+    def extend_result(self, *operations: OperationBase) -> None:
+        self.result.extend(operations)
 
     def _parse_argument(
         self, argument: Symbol, allow_strings: bool = False
@@ -57,33 +60,33 @@ class Translator:
         argument = self.parse_argument(allow_strings=allow_strings)
         if allow_strings and isinstance(argument, str):
             for character in argument:
-                self.result.append(
+                self.extend_result(
                     BinaryOperation(
                         code=BinaryOperation.Code.MOVE_DATA,
                         left=Value(value=ord(character)),
                     )
                 )
                 if operation is not None:
-                    self.result.append(operation)
+                    self.extend_result(operation)
             return
         if argument is None:
             self.translate_valuable()
         elif isinstance(argument, int):
-            self.result.append(
+            self.extend_result(
                 BinaryOperation(
                     code=BinaryOperation.Code.MOVE_DATA,
                     left=Value(value=argument),
                 )
             )
         elif isinstance(argument, VarDef):
-            self.result.append(
+            self.extend_result(
                 MemoryOperation(
                     code=MemoryOperation.Code.LOAD_MEMORY,
                     address=argument.location,
                 )
             )
         if operation is not None:
-            self.result.append(operation)
+            self.extend_result(operation)
 
     def translate_construct(self) -> tuple[JumpOperation, int]:
         header: Symbol = self.reader.next()
@@ -96,21 +99,20 @@ class Translator:
             data = template.data
             self.translate_operation(data.command)
             skip_operation = JumpOperation(code=data.jump)
-            self.result.append(skip_operation)
+            self.extend_result(skip_operation)
             if data.negated:
                 skip_operation = JumpOperation()
-                self.result.append(skip_operation)
+                self.extend_result(skip_operation)
             self.check_closed_bracket()
         else:
-            variable = self.variables.read(header.text)
-            self.result.append(
+            self.extend_result(
                 MemoryOperation(
                     code=MemoryOperation.Code.LOAD_MEMORY,
-                    address=variable.location,
+                    address=self.variables.read(header.text).location,
                 )
             )
             skip_operation = JumpOperation(code=JumpOperation.Code.JUMP_ZERO)
-            self.result.append(skip_operation)
+            self.extend_result(skip_operation)
         skip_jump_index = len(self.result)
         self.translate_blocks(allow_quit=True)
         return skip_operation, skip_jump_index
@@ -120,27 +122,29 @@ class Translator:
 
         right = self.parse_argument()
         if right is None:
-            self.result.append(StackOperation(code=StackOperation.Code.PUSH))
+            self.extend_result(StackOperation(code=StackOperation.Code.PUSH))
             self.translate_valuable()
-            self.result.append(StackOperation(code=StackOperation.Code.GRAB, right=RB))
-            self.result.append(BinaryOperation(code=operation_type, right=RB, left=RA))
+            self.extend_result(
+                StackOperation(code=StackOperation.Code.GRAB, right=RB),
+                BinaryOperation(code=operation_type, right=RB, left=RA),
+            )
             if operation_type != BinaryOperation.Code.COMPARE:
-                self.result.append(
+                self.extend_result(
                     BinaryOperation(code=BinaryOperation.Code.MOVE_DATA, left=RB)
                 )
         elif isinstance(right, int):
-            self.result.append(
+            self.extend_result(
                 BinaryOperation(code=operation_type, left=Value(value=right))
             )
         elif isinstance(right, VarDef):
-            self.result.append(
+            self.extend_result(
                 MemoryOperation(
                     code=MemoryOperation.Code.LOAD_MEMORY,
                     right=RB,
                     address=right.location,
-                )
+                ),
+                BinaryOperation(code=operation_type, left=RB),
             )
-            self.result.append(BinaryOperation(code=operation_type, left=RB))
 
     def translate_command(self) -> None:
         header = self.reader.next_expression().text[1:]
@@ -169,7 +173,7 @@ class Translator:
             case "loop":
                 condition_start: int = len(self.result)
                 skip_operation, skip_jump_index = self.translate_construct()
-                self.result.append(
+                self.extend_result(
                     JumpOperation(offset=condition_start - len(self.result) - 1)
                 )
                 skip_operation.offset = len(self.result) - skip_jump_index
@@ -182,7 +186,7 @@ class Translator:
         header = self.reader.next_expression().text[1:]
 
         if header == "input":
-            self.result.append(
+            self.extend_result(
                 MemoryOperation(
                     code=MemoryOperation.Code.LOAD_MEMORY,
                     address=INPUT_ADDRESS,
