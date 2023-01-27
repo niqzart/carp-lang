@@ -37,7 +37,7 @@ def translate(
 
     try:
         translator: Translator = Translator(reader=reader)
-        translator.parse_blocks()
+        translator.translate_blocks()
         compiled = [operation.dict() for operation in translator.result]
 
         with open(output_path, "w") as f:

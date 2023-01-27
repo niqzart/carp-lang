@@ -9,7 +9,7 @@ from common.operations import (
     RB,
     RA,
     JumpOperation,
-    OPERAND_TO_CODE,
+    OPERATOR_TO_CODE,
 )
 from translator.reader import Reader, Symbol
 from translator.comparators import SYMBOL_TO_COMPARATOR
@@ -56,7 +56,7 @@ class Translator:
     ) -> None:
         argument = self.parse_argument(allow_strings=allow_strings)
         if allow_strings and isinstance(argument, str):
-            for character in argument[1:-1]:
+            for character in argument:
                 self.result.append(
                     BinaryOperation(
                         code=BinaryOperation.Code.MOVE_DATA,
@@ -67,7 +67,7 @@ class Translator:
                     self.result.append(operation)
             return
         if argument is None:
-            self.parse_valuable()
+            self.translate_valuable()
         elif isinstance(argument, int):
             self.result.append(
                 BinaryOperation(
@@ -90,17 +90,18 @@ class Translator:
         skip_operation: JumpOperation
         if header.is_expression:
             comparator: str = header.text[1:]
-            data = SYMBOL_TO_COMPARATOR.get(comparator).data
-            self.translate_operation(data.command)
-            if data is None:
+            template = SYMBOL_TO_COMPARATOR.get(comparator)
+            if template is None:
                 raise TranslationError(f"Unknown comparator: '{comparator}'")
+            data = template.data
+            self.translate_operation(data.command)
             skip_operation = JumpOperation(code=data.jump)
             self.result.append(skip_operation)
             if data.negated:
                 skip_operation = JumpOperation()
                 self.result.append(skip_operation)
             self.check_closed_bracket()
-        elif self.variables.check_name(header.text):
+        else:
             variable = self.variables.read(header.text)
             self.result.append(
                 MemoryOperation(
@@ -110,10 +111,8 @@ class Translator:
             )
             skip_operation = JumpOperation(code=JumpOperation.Code.JUMP_ZERO)
             self.result.append(skip_operation)
-        else:
-            raise TranslationError(f"Unsupported condition header: '{header}'")
         skip_jump_index = len(self.result)
-        self.parse_blocks(allow_quit=True)
+        self.translate_blocks(allow_quit=True)
         return skip_operation, skip_jump_index
 
     def translate_operation(self, operation_type: BinaryOperation.Code) -> None:
@@ -122,7 +121,7 @@ class Translator:
         right = self.parse_argument()
         if right is None:
             self.result.append(StackOperation(code=StackOperation.Code.PUSH))
-            self.parse_valuable()
+            self.translate_valuable()
             self.result.append(StackOperation(code=StackOperation.Code.GRAB, right=RB))
             self.result.append(BinaryOperation(code=operation_type, right=RB, left=RA))
             if operation_type != BinaryOperation.Code.COMPARE:
@@ -143,7 +142,7 @@ class Translator:
             )
             self.result.append(BinaryOperation(code=operation_type, left=RB))
 
-    def parse_command(self) -> None:
+    def translate_command(self) -> None:
         header = self.reader.next_expression().text[1:]
 
         match header:
@@ -162,8 +161,7 @@ class Translator:
                     MemoryOperation(
                         code=MemoryOperation.Code.SAVE_MEMORY,
                         address=location,
-                    ),
-                    allow_strings=True,
+                    )
                 )
             case "if":
                 skip_operation, skip_jump_index = self.translate_construct()
@@ -180,7 +178,7 @@ class Translator:
 
         self.check_closed_bracket()
 
-    def parse_valuable(self) -> None:
+    def translate_valuable(self) -> None:
         header = self.reader.next_expression().text[1:]
 
         if header == "input":
@@ -191,14 +189,14 @@ class Translator:
                 )
             )
         else:
-            operation_type = OPERAND_TO_CODE.get(header)
+            operation_type = OPERATOR_TO_CODE.get(header)
             if operation_type is None:
-                raise TranslationError(f"Unknown operand: '{header}'")
+                raise TranslationError(f"Unknown operation: '{header}'")
             self.translate_operation(operation_type)
         self.check_closed_bracket()
 
-    def parse_blocks(self, allow_quit: bool = False) -> None:
+    def translate_blocks(self, allow_quit: bool = False) -> None:
         while self.reader.has_next():
             if allow_quit and self.reader.current_or_closing().is_closing:
                 return
-            self.parse_command()
+            self.translate_command()

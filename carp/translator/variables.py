@@ -18,11 +18,11 @@ class VariableIndex:
         self.variables: dict[str, int] = {}
         self.next_location: int = 16
 
-    def check_name(self, name: str) -> bool:
-        return re.fullmatch(self.VARIABLE_REGEX, name) is not None
+    def bad_name(self, name: str) -> bool:
+        return re.fullmatch(self.VARIABLE_REGEX, name) is None
 
     def register(self, name: str) -> int:
-        if not re.fullmatch(self.VARIABLE_REGEX, name):
+        if self.bad_name(name):
             raise TranslationError(f"Unsupported variable name: '{name}'")
         if name not in self.variables:
             self.variables[name] = self.next_location
@@ -30,6 +30,8 @@ class VariableIndex:
         return self.variables[name]
 
     def read(self, name: str) -> VarDef:
+        if self.bad_name(name):
+            raise TranslationError(f"Unsupported variable name: '{name}'")
         location = self.variables.get(name)
         if location is None:
             raise TranslationError(f"Variable '{name}' is not defined")

@@ -5,7 +5,6 @@ from translator.parser import Symbol, Parser
 class Reader:
     def __init__(self, data: str) -> None:
         self.symbols: list[Symbol] = Parser(data).result
-        print(self.symbols)
         self.position: int = 0
 
     def has_next(self) -> bool:

@@ -46,7 +46,7 @@ class BinaryOperation(OperationBase):
     left: Registry | Value
 
 
-OPERAND_TO_CODE: dict[str, BinaryOperation.Code] = {
+OPERATOR_TO_CODE: dict[str, BinaryOperation.Code] = {
     "+": BinaryOperation.Code.MATH_ADD,
     "-": BinaryOperation.Code.MATH_SUB,
     "*": BinaryOperation.Code.MATH_MUL,

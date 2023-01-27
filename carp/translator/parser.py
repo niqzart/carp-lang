@@ -33,18 +33,11 @@ class Symbol(BaseModel):
 
 
 class ParserError(Exception):
-    def __init__(self, text: str, symbol: Symbol | None = None):
+    def __init__(self, text: str):
         self.text: str = text
-        self.symbol: Symbol = symbol
 
     def __str__(self) -> str:
-        if self.symbol is None:
-            return f"Parsing error occurred: {self.text}"
-        return (
-            f"Parsing error occurred at "
-            f"{self.symbol.line}:{self.symbol.char} "
-            f"({self.symbol.text}): {self.text}"
-        )
+        return f"Parsing error occurred: {self.text}"
 
 
 class Parser:
@@ -83,6 +76,7 @@ class Parser:
                 self.line_number += 1
                 self.char_number = 0
 
+        self.position += 1
         if self.in_quotes:
             raise ParserError("Missing closing quotation mark")
 
@@ -92,9 +86,6 @@ class Parser:
             line=self.started_line_number,
             char=self.started_char_number,
         )
-        if symbol.text.count('"') not in {0, 2}:
-            raise ParserError(f"Incorrect quoting", symbol=symbol)
-
         if symbol.text != "":
             self.result.append(symbol)
 
