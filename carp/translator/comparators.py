@@ -1,9 +1,6 @@
 from pydantic import BaseModel
 
-from common.operations import (
-    BinaryOperation,
-    JumpOperation,
-)
+from common.operations import BinaryOperation, JumpOperation
 
 
 class ComparatorData(BaseModel):

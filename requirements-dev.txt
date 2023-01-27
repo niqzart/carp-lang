@@ -8,6 +8,7 @@ pytest-cov==4.0.0
 black
 
 # Linters:Basics
+isort
 flake8~=4.0.1
 autoflake==1.0.0
 wemake-python-styleguide

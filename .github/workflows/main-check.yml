@@ -36,3 +36,8 @@ jobs:
         if: success() || (failure() && steps.install.conclusion == 'success')
         name: Run flake8
         run: flake8 --config=setup.cfg carp
+
+      - id: isort
+        if: success() || (failure() && steps.install.conclusion == 'success')
+        name: Run isort
+        run: isort carp --check --diff
