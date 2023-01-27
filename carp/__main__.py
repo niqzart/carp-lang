@@ -74,7 +74,7 @@ def execute(
     data_path = DataPath(
         data_memory_size=100,
         instruction_memory=operations,
-        input_data=input_data
+        input_data=input_data,
     )
     control = ControlUnit(data_path)
     try:

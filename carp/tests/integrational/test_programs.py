@@ -7,10 +7,12 @@ EXAMPLE_FOLDER: Path = Path("examples")
 
 
 def check_output(*args: str) -> str:
-    return subprocess.check_output(
-        ["python", "carp", *args],
-        cwd="./.."
-    ).decode("utf-8").strip().replace("\r\n", "\n")
+    return (
+        subprocess.check_output(["python", "carp", *args], cwd="./..")
+        .decode("utf-8")
+        .strip()
+        .replace("\r\n", "\n")
+    )
 
 
 @pytest.mark.parametrize(

@@ -83,7 +83,7 @@ class Parser:
 
     def end_symbol(self) -> None:
         symbol: Symbol = Symbol(
-            text=self.data[self.started_position:self.position].strip(")"),
+            text=self.data[self.started_position : self.position].strip(")"),
             line=self.started_line_number,
             char=self.started_char_number,
         )
