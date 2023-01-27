@@ -1,7 +1,7 @@
 INPUT_ADDRESS: int = 1
-"""A memory address, mapped to the input device"""
+# A memory address, mapped to the input device
 OUTPUT_ADDRESS: int = 3
-"""A memory address, mapped to the output device"""
+# A memory address, mapped to the output device
 
 IO_DEVICE_COUNT: int = 16
 

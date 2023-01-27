@@ -105,11 +105,10 @@ class Translator:
                 self.extend_result(skip_operation)
             self.check_closed_bracket()
         else:
-            variable = self.variables.read(header.text)
             self.extend_result(
                 MemoryOperation(
                     code=MemoryOperation.Code.LOAD_MEMORY,
-                    address=variable.location,
+                    address=self.variables.read(header.text).location,
                 )
             )
             skip_operation = JumpOperation(code=JumpOperation.Code.JUMP_ZERO)

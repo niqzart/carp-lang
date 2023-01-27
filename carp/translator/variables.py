@@ -1,5 +1,4 @@
 import re
-from typing import Pattern
 
 from pydantic import BaseModel
 
@@ -13,7 +12,7 @@ class VarDef(BaseModel):
 
 
 class VariableIndex:
-    VARIABLE_REGEX: Pattern[str] = re.compile(r"[a-z_][a-z_0-9]*")
+    VARIABLE_REGEX: re.Pattern[str] = re.compile("[a-z_][a-z_0-9]*")
 
     def __init__(self) -> None:
         self.variables: dict[str, int] = {}

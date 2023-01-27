@@ -19,7 +19,7 @@ class ControlUnit:
     Executes just one program by simulating all CPU cycles, implemented as methods.
     """
 
-    def __init__(self, data_path: DataPath):
+    def __init__(self, data_path: DataPath) -> None:
         self.data_path: DataPath = data_path
         self.log: list[LogRecord] = []
         self.finished: bool = False
@@ -72,12 +72,13 @@ class ControlUnit:
             )
 
     def execute_jump_operation(self, operation: JumpOperation) -> None:
-        if (
+        no_jump: bool = (
             operation.code is JumpOperation.Code.JUMP_ZERO
             and not self.data_path.alu.zero
             or operation.code is JumpOperation.Code.JUMP_NEGATIVE
             and not self.data_path.alu.negative
-        ):
+        )
+        if no_jump:
             return
 
         self.data_path.instruction_pointer = self.data_path.alu_execute(

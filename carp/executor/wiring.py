@@ -16,7 +16,7 @@ class DataPath:
         data_memory_size: int,
         instruction_memory: list[Operation],
         input_data: list[int],
-    ):
+    ) -> None:
         self.general_registries: dict[Registry.Code, int] = {
             Registry.Code.ACCUMULATOR: 0,
             Registry.Code.BUFFER: 0,
@@ -58,7 +58,7 @@ class DataPath:
     def _get_io_device(self, index: int) -> list[int]:
         device = self.io.get(index)
         if device is None:
-            raise Exception(f"Device {index} not connected")
+            raise RuntimeError(f"Device {index} not connected")
         return device
 
     def memory_read(self, destination: Registry.Code, stack: bool = False) -> None:
@@ -117,7 +117,8 @@ class DataPath:
 
     def record_state(self) -> LogRecord:
         """Logging/debugging function to record the full state of the DataPath"""
-        result = LogRecord(
+        self.last_io = {}
+        return LogRecord(
             registries=RegistriesRecord(
                 accumulator=self.accumulator,
                 buffer=self.buffer,
@@ -130,11 +131,9 @@ class DataPath:
                 zero=self.alu.zero,
                 negative=self.alu.negative,
             ),
-            input=self.last_io.get(INPUT_ADDRESS),
-            output=self.last_io.get(OUTPUT_ADDRESS),
+            input_data=self.last_io.get(INPUT_ADDRESS),
+            output_data=self.last_io.get(OUTPUT_ADDRESS),
         )
-        self.last_io = {}
-        return result
 
     def get_output(self) -> list[int]:
         """A simplification function for getting full program's standard output"""

@@ -20,5 +20,5 @@ class FlagsRecord(BaseModel):
 class LogRecord(BaseModel):
     registries: RegistriesRecord
     flags: FlagsRecord
-    input: int | None = None
-    output: int | None = None
+    input_data: int | None = None
+    output_data: int | None = None

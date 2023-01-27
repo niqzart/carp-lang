@@ -30,7 +30,8 @@ def test_one(program_name: str, file_in: bool, expected: str | None):
         execute_command.append(str(EXAMPLE_FOLDER / f"{program_name}.in.txt"))
 
     if expected is None:
-        with open(".." / EXAMPLE_FOLDER / f"{program_name}.in.txt") as f:
+        path = ".." / EXAMPLE_FOLDER / f"{program_name}.in.txt"
+        with open(path, encoding="utf-8") as f:
             expected = f.read() + "\0"
 
     assert check_output(*execute_command) == expected

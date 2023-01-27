@@ -29,7 +29,7 @@ class ALU:
         ALUOperation.RIGHT: lambda *args: args[1],
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.right: int = 0
         self.left: int = 0
 

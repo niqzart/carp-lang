@@ -1,5 +1,5 @@
 import json
-from typing import Callable
+from collections.abc import Callable
 
 import pytest
 
@@ -278,11 +278,11 @@ def test_constructs(
         assert operation.get("code") == "jb"
         assert operation.get("offset") == offset_forward
     operation = real.pop()
-    assert operation.get("code") == "jz" if data.zero else "jn"
+    assert operation.get("code") == ("jz" if data.zero else "jn")
     assert operation.get("offset") == (1 if data.negated else offset_forward)
     if compared:
         operation = real.pop()
-        assert operation.get("code") == "pmc" if data.reversed else "cmp"
+        assert operation.get("code") == ("pmc" if data.reverse else "cmp")
 
     assert len(real) == len(expected)
     for i in range(len(expected)):
@@ -314,7 +314,7 @@ def test_unknown_header(
 
 def test_blocks(translator, position, assert_debug_symbol):
     translator.translate_blocks()
-    assert translator.result == []
+    assert len(translator.result) == 0
 
     translator.reader.symbols = [Symbol(text=")", **position)]
     translator.translate_blocks(allow_quit=True)
