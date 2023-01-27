@@ -235,8 +235,9 @@ Options:
 - При прогоне также считается покрытие
 
 ### CI
-- В проекте настроен линтер flake8 с [кучей плагинов](./requirements-dev.txt)
-- В проекте настроен линтер isort
+- Настроен линтер flake8 с [кучей плагинов](./requirements-dev.txt)
+- Настроен линтер isort
+- Настроен mypy в строгом режиме (со всеми опциональными проверками)
 - Настройки линтеров и coverage лежат в [setup.cfg](./setup.cfg)
 - Все линтеры и тесты включены в [github-pipeline](./.github/workflows/main-check.yml)
 

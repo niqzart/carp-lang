@@ -34,8 +34,13 @@ jobs:
 
       - id: flake8
         if: success() || (failure() && steps.install.conclusion == 'success')
-        name: Run flake8
+        name: Lint with flake8
         run: flake8 --config=setup.cfg carp
+
+      - id: mypy
+        if: success() || (failure() && steps.install.conclusion == 'success')
+        name: Lint with mypy
+        run: mypy carp --config-file=setup.cfg
 
       - id: isort
         if: success() || (failure() && steps.install.conclusion == 'success')
