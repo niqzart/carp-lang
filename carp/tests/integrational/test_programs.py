@@ -23,7 +23,7 @@ def check_output(*args: str) -> str:
         pytest.param("prob2", False, "4613732", id="prob2"),
     ],
 )
-def test_one(program_name: str, file_in: bool, expected: str | None):
+def test_one(program_name: str, file_in: bool, expected: str | None) -> None:
     check_output("translate", str(EXAMPLE_FOLDER / f"{program_name}.carp"))
 
     execute_command = ["execute", str(EXAMPLE_FOLDER / f"{program_name}.curp")]
@@ -32,7 +32,7 @@ def test_one(program_name: str, file_in: bool, expected: str | None):
 
     if expected is None:
         path = ".." / EXAMPLE_FOLDER / f"{program_name}.in.txt"
-        with open(path, encoding="utf-8") as f:
+        with path.open(encoding="utf-8") as f:
             expected = f.read() + "\0"
 
     assert check_output(*execute_command) == expected

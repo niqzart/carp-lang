@@ -44,10 +44,11 @@ class ControlUnit:
     }
 
     def execute_binary_operation(self, operation: BinaryOperation) -> None:
+        source: int
         if isinstance(operation.left, Registry):
-            source: int = self.data_path.general_registries[operation.left.code]
+            source = self.data_path.general_registries[operation.left.code]
         elif isinstance(operation.left, Value):
-            source: int = operation.left.value
+            source = operation.left.value
         target: int = self.data_path.general_registries[operation.right.code]
 
         if operation.code == BinaryOperation.Code.COMPARE:
@@ -94,6 +95,8 @@ class ControlUnit:
         Operation is grabbed from the command_data registry.
         No memory operations are performed and this stage.
         """
+        if self.data_path.command_data is None:
+            return
 
         operation: OperationBase = self.data_path.command_data.__root__
         if isinstance(operation, BinaryOperation):
@@ -119,6 +122,9 @@ class ControlUnit:
         Addresses in required registries should be prepared during previous stages.
         No calculations are performed and this stage.
         """
+        if self.data_path.command_data is None:
+            return
+
         operation: OperationBase = self.data_path.command_data.__root__
         if isinstance(operation, MemoryOperation):
             if operation.code is MemoryOperation.Code.LOAD_MEMORY:

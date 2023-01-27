@@ -1,5 +1,7 @@
 import json
 from collections.abc import Callable
+from dataclasses import dataclass
+from typing import Any
 
 import pytest
 
@@ -12,13 +14,19 @@ from translator.reader import Reader
 from translator.translator import Translator
 
 
+# hack for mypy's typization
+@dataclass
+class FixtureRequest:
+    param: int
+
+
 @pytest.fixture(params=[pytest.param(i, id=f"line_{i}") for i in range(3)])
-def line(request) -> int:
+def line(request: FixtureRequest) -> int:
     return request.param
 
 
 @pytest.fixture(params=[pytest.param(i, id=f"char_{i}") for i in range(3)])
-def char(request) -> int:
+def char(request: FixtureRequest) -> int:
     return request.param
 
 
@@ -40,7 +48,9 @@ def translator(reader: Reader) -> Translator:
 
 
 @pytest.fixture
-def assert_debug_symbol(position, reader: Reader) -> Callable[[str], None]:
+def assert_debug_symbol(
+    position: dict[str, int], reader: Reader
+) -> Callable[[str], None]:
     def assert_debug_symbol_inner(expected_text: str) -> None:
         reader.back()
         debug_symbol: Symbol = reader.current_or_closing()
@@ -54,7 +64,7 @@ def assert_debug_symbol(position, reader: Reader) -> Callable[[str], None]:
 THE_INTEGER = 1
 THE_VARIABLE = "var"
 
-translated_arguments: dict[str, tuple[list[str], dict]] = {
+translated_arguments: dict[str, tuple[list[str], dict[str, Any]]] = {
     "integer": (
         [f"{THE_INTEGER}"],
         {
@@ -89,7 +99,9 @@ translated_arguments: dict[str, tuple[list[str], dict]] = {
         for key, (symbols, expected) in translated_arguments.items()
     ],
 )
-def test_arguments(translator, symbols: list[str], expected: dict):
+def test_arguments(
+    translator: Translator, symbols: list[str], expected: dict[str, Any]
+) -> None:
     translator.reader.symbols = [
         Symbol(text=symbol_text, line=0, char=0) for symbol_text in symbols
     ]
@@ -106,7 +118,11 @@ def test_arguments(translator, symbols: list[str], expected: dict):
     assert real[1] == additional_operation
 
 
-def test_deny_strings(translator, position, assert_debug_symbol):
+def test_deny_strings(
+    translator: Translator,
+    position: dict[str, int],
+    assert_debug_symbol: Callable[[str], None],
+) -> None:
     symbol_text: str = '"hello"'
     translator.reader.symbols = [Symbol(text=symbol_text, **position)]
     with pytest.raises(TranslationError) as e:
@@ -171,11 +187,11 @@ def test_deny_strings(translator, position, assert_debug_symbol):
     ],
 )
 def test_operators(
-    translator,
+    translator: Translator,
     operator: str,
     second_arg_symbol: list[str],
-    second_arg_expected: list[dict],
-):
+    second_arg_expected: list[dict[str, Any]],
+) -> None:
     translator.reader.symbols = [
         Symbol(text=symbol_text, line=0, char=0)
         for symbol_text in ("(" + operator, str(THE_INTEGER), *second_arg_symbol, ")")
@@ -200,7 +216,7 @@ def test_operators(
         pytest.param(["(assign", THE_VARIABLE, str(THE_INTEGER), ")"], 16, id="assign"),
     ],
 )
-def test_commands(translator, command: list[str], address: int):
+def test_commands(translator: Translator, command: list[str], address: int) -> None:
     translator.reader.symbols = [
         Symbol(text=symbol_text, line=0, char=0) for symbol_text in command
     ]
@@ -251,13 +267,13 @@ def test_commands(translator, command: list[str], address: int):
 )
 @pytest.mark.parametrize("construct", ("if", "loop"))
 def test_constructs(
-    translator,
+    translator: Translator,
     construct: str,
     compared: bool,
     comparison: list[str],
-    expected: list[dict],
+    expected: list[dict[str, Any]],
     data: ComparatorTemplate,
-):
+) -> None:
     offset_forward: int = int(construct == "loop")
     offset_backward: int = -(3 + data.negated + compared)
     translator.reader.symbols = [
@@ -298,12 +314,12 @@ def test_constructs(
     ],
 )
 def test_unknown_header(
-    translator,
-    position,
-    assert_debug_symbol,
+    translator: Translator,
+    position: dict[str, int],
+    assert_debug_symbol: Callable[[str], None],
     name: str,
     method: Callable[[Translator], None],
-):
+) -> None:
     operator: str = "!"
     translator.reader.symbols = [Symbol(text="(" + operator, **position)]
     with pytest.raises(TranslationError) as e:
@@ -312,7 +328,11 @@ def test_unknown_header(
     assert_debug_symbol("(" + operator)
 
 
-def test_blocks(translator, position, assert_debug_symbol):
+def test_blocks(
+    translator: Translator,
+    position: dict[str, int],
+    assert_debug_symbol: Callable[[str], None],
+) -> None:
     translator.translate_blocks()
     assert len(translator.result) == 0
 

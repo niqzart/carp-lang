@@ -12,7 +12,8 @@ from common.operations import (
     OPERATOR_TO_CODE,
 )
 from translator.comparators import SYMBOL_TO_COMPARATOR
-from translator.reader import Reader, Symbol
+from translator.parser import Symbol
+from translator.reader import Reader
 from translator.variables import VariableIndex, VarDef
 
 
@@ -55,7 +56,7 @@ class Translator:
         return self._parse_argument(self.reader.next(), allow_strings=allow_strings)
 
     def translate_argument(
-        self, operation: OperationBase = None, allow_strings: bool = False
+        self, operation: OperationBase | None = None, allow_strings: bool = False
     ) -> None:
         argument = self.parse_argument(allow_strings=allow_strings)
         if allow_strings and isinstance(argument, str):
