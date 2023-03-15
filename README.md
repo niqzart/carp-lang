@@ -13,21 +13,21 @@ CARP — Creative ARRay Processor
 <block> ::= <expression> | <expression> <s> <block>
 <expression> ::= "(" <command> ")"
 
-<command> ::= "output" <s> <arg> | 
-              "print" <s> <arg> | 
-              "print" <s> '"' <string> '"' |
-              "assign" <s> <var> <s> <arg> |
-              <construct> <s> <boolean> <s> <block>
+<valuable> ::= "input" |
+               <operand> <s> <args> |
+               "output" <s> <arg> | 
+               "print" <s> <arg> | 
+               "print" <s> '"' <string> '"' |
+               "assign" <s> <var> <s> <arg> |
+               <construct> <s> <boolean> <s> <block>
+
+<operand> ::= "+" | "-" | "*" | "/" | "%"
+<arg> ::= <number> | <var> | <valuable>
+<args> ::= <arg> | <arg> <s> <args> 
  
 <construct> ::= "if" | "loop"
 <boolean> ::= "(" <comparator> <s> <arg> <s> <arg> ")" | <var>
 <comparator> ::= "=" | ">" | "<" | ">=" | "<=" | "!="
-
-<valuable> ::= "input" | <operand> <s> <args>
-<args> ::= <arg> | <arg> <s> <args> 
-<operand> ::= "+" | "-" | "*" | "/" | "%"
-
-<arg> ::= <number> | <var> | <valuable>
 
 <number> ::= r"-?[0-9]+"
 <var> ::= r"[a-z_][a-z_0-9]*"
@@ -246,7 +246,7 @@ Options:
 - Тесты написаны на pytest
 - Unit-тесты, покрывающие все индивидуальные части ([translation](./carp/tests/translation) и [execution](./carp/tests/execution))
 - Интеграционные тесты используют подготовленные команды и запускают проект также, как запускал бы пользователь ([integrational](./carp/tests/integrational))
-- Интеграционные тесты используют golden-тестирование, обновить вывод: `pytest tests/integrational --update-goldens`
+- Интеграционные тесты используют golden-тестирование, обновить вывод: `pytest tests --update-goldens`
 - Запустить все тесты (из папки `carp`): `pytest tests --cov=.`
 - При прогоне также считается покрытие
 

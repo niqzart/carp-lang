@@ -84,7 +84,7 @@ def execute(
             with output_path.open("w", encoding="utf-8") as f:
                 f.write(result)
         else:
-            print(result)
+            print(result, end="")
     except (IndexError, RuntimeError) as e:
         control.save_state()
         print(f"Error: {e}")

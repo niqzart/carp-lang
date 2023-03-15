@@ -153,15 +153,26 @@ class Translator:
                     )
                 )
 
-    def translate_output(self) -> None:
+    def translate_output(self, registry: Registry) -> None:
+        buffer_registry: Registry = RB if registry is RA else RA
+
         itoc: Value = Value(value=48)
+        self.extend_result(
+            StackOperation(code=StackOperation.Code.PUSH, right=registry),
+            BinaryOperation(
+                code=BinaryOperation.Code.MOVE_DATA, right=registry, left=registry
+            ),
+        )
         self.extend_result(  # handling zero
             JumpOperation(code=JumpOperation.Code.JUMP_ZERO, offset=1),
             JumpOperation(code=JumpOperation.Code.JUMP_BECAUSE, offset=3),
-            BinaryOperation(code=BinaryOperation.Code.MATH_ADD, left=itoc),
+            BinaryOperation(
+                code=BinaryOperation.Code.MATH_ADD, right=registry, left=itoc
+            ),
             MemoryOperation(
                 code=MemoryOperation.Code.SAVE_MEMORY,
                 address=OUTPUT_ADDRESS,
+                right=registry,
             ),
             JumpOperation(code=JumpOperation.Code.JUMP_BECAUSE, offset=18),
         )
@@ -170,62 +181,80 @@ class Translator:
             JumpOperation(code=JumpOperation.Code.JUMP_BECAUSE, offset=3),
             BinaryOperation(
                 code=BinaryOperation.Code.MOVE_DATA,
-                right=RB,
+                right=buffer_registry,
                 left=Value(value=45),
             ),
             MemoryOperation(
                 code=MemoryOperation.Code.SAVE_MEMORY,
-                right=RB,
+                right=buffer_registry,
                 address=OUTPUT_ADDRESS,
             ),
             BinaryOperation(
                 code=BinaryOperation.Code.MATH_MUL,
                 left=Value(value=-1),
+                right=registry,
             ),
         )
         self.extend_result(  # null-termination
             BinaryOperation(
                 code=BinaryOperation.Code.MOVE_DATA,
-                right=RB,
+                right=buffer_registry,
                 left=Value(value=0),
             ),
-            StackOperation(code=StackOperation.Code.PUSH, right=RB),
+            StackOperation(code=StackOperation.Code.PUSH, right=buffer_registry),
         )
         self.extend_result(  # main loop
             BinaryOperation(
                 code=BinaryOperation.Code.MOVE_DATA,
-                right=RB,
-                left=RA,
+                right=buffer_registry,
+                left=registry,
             ),
             JumpOperation(code=JumpOperation.Code.JUMP_ZERO, offset=5),
             BinaryOperation(
                 code=BinaryOperation.Code.MATH_MOD,
-                right=RB,
+                right=buffer_registry,
                 left=Value(value=10),
             ),
             BinaryOperation(
                 code=BinaryOperation.Code.MATH_ADD,
-                right=RB,
+                right=buffer_registry,
                 left=itoc,
             ),
-            StackOperation(code=StackOperation.Code.PUSH, right=RB),
+            StackOperation(code=StackOperation.Code.PUSH, right=buffer_registry),
             BinaryOperation(
                 code=BinaryOperation.Code.MATH_DIV,
                 left=Value(value=10),
+                right=registry,
             ),
             JumpOperation(code=JumpOperation.Code.JUMP_BECAUSE, offset=-7),
         )
         self.extend_result(  # printing loop
-            StackOperation(code=StackOperation.Code.GRAB),
+            StackOperation(code=StackOperation.Code.GRAB, right=registry),
             JumpOperation(code=JumpOperation.Code.JUMP_ZERO, offset=2),
             MemoryOperation(
                 code=MemoryOperation.Code.SAVE_MEMORY,
                 address=OUTPUT_ADDRESS,
+                right=registry,
             ),
             JumpOperation(code=JumpOperation.Code.JUMP_BECAUSE, offset=-4),
         )
+        self.extend_result(
+            BinaryOperation(
+                code=BinaryOperation.Code.MOVE_DATA,
+                right=registry,
+                left=Value(value=10),
+            ),
+            MemoryOperation(
+                code=MemoryOperation.Code.SAVE_MEMORY,
+                address=OUTPUT_ADDRESS,
+                right=registry,
+            ),
+            StackOperation(code=StackOperation.Code.GRAB, right=registry),
+        )
 
-    def translate_command(self) -> None:
+    def translate_valuable(
+        self, result_registry: Registry = RA, stack: bool = True
+    ) -> None:
         header = self.reader.next_expression().text[1:]
 
         match header:
@@ -235,12 +264,13 @@ class Translator:
                         code=MemoryOperation.Code.SAVE_MEMORY,
                         address=OUTPUT_ADDRESS,
                     ),
+                    result_registry=result_registry,
                     allow_strings=True,
-                    stack=False,
+                    stack=stack,
                 )
             case "output":
-                self.translate_argument(stack=False)
-                self.translate_output()
+                self.translate_argument(stack=stack, result_registry=result_registry)
+                self.translate_output(result_registry)
             case "assign":
                 var_name = self.reader.next().text
                 location = self.variables.register(var_name)
@@ -249,7 +279,8 @@ class Translator:
                         code=MemoryOperation.Code.SAVE_MEMORY,
                         address=location,
                     ),
-                    stack=False,
+                    result_registry=result_registry,
+                    stack=stack,
                 )
             case "if":
                 skip_operation, skip_jump_index = self.translate_construct()
@@ -261,35 +292,25 @@ class Translator:
                     JumpOperation(offset=condition_start - len(self.result) - 1)
                 )
                 skip_operation.offset = len(self.result) - skip_jump_index
-            case _:
-                raise TranslationError(f"Unknown command: '{header}'")
-
-        self.check_closed_bracket()
-
-    def translate_valuable(
-        self, result_registry: Registry = RA, stack: bool = True
-    ) -> None:
-        header = self.reader.next_expression().text[1:]
-
-        if header == "input":
-            self.extend_result(
-                MemoryOperation(
-                    code=MemoryOperation.Code.LOAD_MEMORY,
-                    right=result_registry,
-                    address=INPUT_ADDRESS,
+            case "input":
+                self.extend_result(
+                    MemoryOperation(
+                        code=MemoryOperation.Code.LOAD_MEMORY,
+                        right=result_registry,
+                        address=INPUT_ADDRESS,
+                    )
                 )
-            )
-        else:
-            operation_type = OPERATOR_TO_CODE.get(header)
-            if operation_type is None:
-                raise TranslationError(f"Unknown operation: '{header}'")
-            self.translate_operation(
-                operation_type, result_registry=result_registry, stack=stack
-            )
+            case _:
+                operation_type = OPERATOR_TO_CODE.get(header)
+                if operation_type is None:
+                    raise TranslationError(f"Unknown operation: '{header}'")
+                self.translate_operation(
+                    operation_type, result_registry=result_registry, stack=stack
+                )
         self.check_closed_bracket()
 
     def translate_blocks(self, allow_quit: bool = False) -> None:
         while self.reader.has_next():
             if allow_quit and self.reader.current_or_closing().is_closing:
                 return
-            self.translate_command()
+            self.translate_valuable(stack=False)

@@ -1,9 +1,14 @@
 import json
 from collections.abc import Callable
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
 
 import pytest
+from pytest_golden.plugin import (  # type: ignore
+    GoldenTestFixtureFactory,
+    GoldenTestFixture,
+)
 
 from common.constants import INPUT_ADDRESS, OUTPUT_ADDRESS
 from common.errors import TranslationError
@@ -224,7 +229,7 @@ def test_commands(translator: Translator, command: list[str], address: int) -> N
     translator.reader.symbols = [
         Symbol(text=symbol_text, line=0, char=0) for symbol_text in command
     ]
-    translator.translate_command()
+    translator.translate_valuable()
 
     real = [json.loads(operation.json()) for operation in translator.result]
     assert len(real) == 2
@@ -235,72 +240,17 @@ def test_commands(translator: Translator, command: list[str], address: int) -> N
     }
 
 
-def test_output(translator: Translator) -> None:
+def test_output(golden: GoldenTestFixtureFactory, translator: Translator) -> None:
+    gold: GoldenTestFixture = golden.open(Path("output.yml"))
+
     translator.reader.symbols = [
         Symbol(text=symbol_text, line=0, char=0)
         for symbol_text in ("(output", THE_VARIABLE, ")")
     ]
-    translator.translate_command()
+    translator.translate_valuable()
 
     real = [json.loads(operation.json()) for operation in translator.result]
-    assert real == [
-        {"code": "load", "right": {"type": "registry", "code": "A"}, "address": 16},
-        {"code": "jz", "offset": 1},
-        {"code": "jb", "offset": 3},
-        {
-            "code": "add",
-            "right": {"type": "registry", "code": "A"},
-            "left": {"type": "value", "value": 48},
-        },
-        {"code": "save", "right": {"type": "registry", "code": "A"}, "address": 3},
-        {"code": "jb", "offset": 18},
-        {"code": "jn", "offset": 1},
-        {"code": "jb", "offset": 3},
-        {
-            "code": "mov",
-            "right": {"type": "registry", "code": "B"},
-            "left": {"type": "value", "value": 45},
-        },
-        {"code": "save", "right": {"type": "registry", "code": "B"}, "address": 3},
-        {
-            "code": "mul",
-            "right": {"type": "registry", "code": "A"},
-            "left": {"type": "value", "value": -1},
-        },
-        {
-            "code": "mov",
-            "right": {"type": "registry", "code": "B"},
-            "left": {"type": "value", "value": 0},
-        },
-        {"code": "push", "right": {"type": "registry", "code": "B"}},
-        {
-            "code": "mov",
-            "right": {"type": "registry", "code": "B"},
-            "left": {"type": "registry", "code": "A"},
-        },
-        {"code": "jz", "offset": 5},
-        {
-            "code": "mod",
-            "right": {"type": "registry", "code": "B"},
-            "left": {"type": "value", "value": 10},
-        },
-        {
-            "code": "add",
-            "right": {"type": "registry", "code": "B"},
-            "left": {"type": "value", "value": 48},
-        },
-        {"code": "push", "right": {"type": "registry", "code": "B"}},
-        {
-            "code": "div",
-            "right": {"type": "registry", "code": "A"},
-            "left": {"type": "value", "value": 10},
-        },
-        {"code": "jb", "offset": -7},
-        {"code": "grab", "right": {"type": "registry", "code": "A"}},
-        {"code": "jz", "offset": 2},
-        {"code": "save", "right": {"type": "registry", "code": "A"}, "address": 3},
-        {"code": "jb", "offset": -4},
-    ]
+    assert real == gold.out["output"]
 
 
 @pytest.mark.parametrize(
@@ -357,7 +307,7 @@ def test_constructs(
         Symbol(text=symbol_text, line=0, char=0)
         for symbol_text in ("(" + construct, *comparison, ")")
     ]
-    translator.translate_command()
+    translator.translate_valuable()
 
     real = [json.loads(operation.json()) for operation in translator.result]
 
@@ -386,7 +336,6 @@ def test_constructs(
     ("name", "method"),
     [
         pytest.param("operation", Translator.translate_valuable, id="operation"),
-        pytest.param("command", Translator.translate_command, id="command"),
         pytest.param("comparator", Translator.translate_construct, id="comparator"),
     ],
 )
