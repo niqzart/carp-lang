@@ -15,7 +15,11 @@ from common.operations import (
     OPERATOR_TO_CODE,
     Registry,
 )
-from translator.comparators import SYMBOL_TO_COMPARATOR
+from translator.comparators import (
+    SYMBOL_TO_COMPARATOR,
+    ComparatorData,
+    ComparatorTemplate,
+)
 from translator.parser import Symbol
 from translator.reader import Reader
 from translator.variables import VariableIndex, VarDef
@@ -50,7 +54,7 @@ class Translator:
             if allow_strings:
                 return str(argument)
             raise TranslationError("Argument can't be a string")
-        if argument.text.isdigit():
+        if argument.is_digit:
             return int(argument.text)
         return self.variables.read(argument.text)
 
@@ -108,35 +112,6 @@ class Translator:
             )
         if operation is not None:
             self.extend_result(operation)
-
-    def translate_construct(self) -> tuple[JumpOperation, int]:
-        header: Symbol = self.reader.next()
-        skip_operation: JumpOperation
-        if header.is_expression:
-            comparator: str = header.text[1:]
-            template = SYMBOL_TO_COMPARATOR.get(comparator)
-            if template is None:
-                raise TranslationError(f"Unknown comparator: '{comparator}'")
-            data = template.data
-            self.translate_operation(data.command, stack=False)
-            skip_operation = JumpOperation(code=data.jump)
-            self.extend_result(skip_operation)
-            if data.negated:
-                skip_operation = JumpOperation()
-                self.extend_result(skip_operation)
-            self.check_closed_bracket()
-        else:
-            self.extend_result(
-                MemoryOperation(
-                    code=MemoryOperation.Code.LOAD_MEMORY,
-                    address=self.variables.read(header.text).location,
-                )
-            )
-            skip_operation = JumpOperation(code=JumpOperation.Code.JUMP_ZERO)
-            self.extend_result(skip_operation)
-        skip_jump_index = len(self.result)
-        self.translate_blocks(allow_quit=True)
-        return skip_operation, skip_jump_index
 
     @contextmanager
     def stack_save(self, reg: Registry) -> Any:
@@ -279,6 +254,99 @@ class Translator:
             StackOperation(code=StackOperation.Code.GRAB, right=registry),
         )
 
+    def translate_comparator(
+        self,
+        data: ComparatorData,
+        result_registry: Registry = RA,
+        stack: bool = True,
+        expressions: bool = False,
+        failure: bool = True,
+        parse_condition: bool = True,
+        additions: list[OperationBase] | None = None,
+    ) -> None:
+        buffer_registry: Registry = RB if result_registry is RA else RA
+
+        with self.stack_save(buffer_registry) if stack else nullcontext():
+            if parse_condition:
+                self.translate_operation(
+                    data.command, result_registry=result_registry, stack=False
+                )
+                self.check_closed_bracket()
+            else:
+                self.reader.back()
+                self.translate_argument(result_registry=result_registry, stack=stack)
+
+            jump_operation: JumpOperation = JumpOperation(code=data.jump)
+            self.extend_result(jump_operation)
+            if data.negated:
+                jump_operation = JumpOperation()
+                self.extend_result(jump_operation)
+            ip_after_condition: int = len(self.result)
+
+            if expressions:
+                self.translate_argument(result_registry=result_registry, stack=stack)
+            else:
+                self.extend_result(
+                    BinaryOperation(
+                        code=BinaryOperation.Code.MOVE_DATA,
+                        right=result_registry,
+                        left=Value(value=1),
+                    )
+                )
+            if additions is not None:
+                self.extend_result(*additions)
+            jump_operation.offset = len(self.result) - ip_after_condition + failure
+
+            if failure:
+                jump_operation = JumpOperation()
+                self.extend_result(jump_operation)
+                ip_after_condition = len(self.result)
+
+                if expressions and not self.reader.current_or_closing().is_closing:
+                    self.translate_argument(
+                        result_registry=result_registry, stack=stack
+                    )
+                    jump_operation.offset = len(self.result) - ip_after_condition
+                else:
+                    self.extend_result(
+                        BinaryOperation(
+                            code=BinaryOperation.Code.MOVE_DATA,
+                            right=result_registry,
+                            left=Value(value=0),
+                        )
+                    )
+
+            if parse_condition:
+                self.check_closed_bracket()
+
+    def translate_construct(
+        self,
+        loop: bool,
+        result_registry: Registry = RA,
+        stack: bool = True,
+    ) -> None:
+        condition: Symbol = self.reader.next()
+        template: ComparatorTemplate = SYMBOL_TO_COMPARATOR["!="]
+
+        is_condition: bool = (
+            condition.is_expression and condition.text[1:] in SYMBOL_TO_COMPARATOR
+        )
+        if is_condition:
+            template = SYMBOL_TO_COMPARATOR[condition.text[1:]]
+
+        condition_start: int = len(self.result)
+        jump_operation: JumpOperation = JumpOperation()
+        self.translate_comparator(
+            data=template.data,
+            result_registry=result_registry,
+            stack=stack,
+            expressions=True,
+            additions=[jump_operation] if loop else None,
+            failure=not loop,
+            parse_condition=is_condition,
+        )
+        jump_operation.offset = condition_start - len(self.result)
+
     def translate_valuable(
         self, result_registry: Registry = RA, stack: bool = True
     ) -> None:
@@ -292,6 +360,10 @@ class Translator:
         header = self.reader.next_expression().text[1:]
 
         match header:
+            case "block":
+                self.translate_blocks(
+                    allow_quit=True, result_registry=result_registry, stack=stack
+                )
             case "print":
                 self.translate_argument(
                     MemoryOperation(
@@ -317,15 +389,15 @@ class Translator:
                     stack=stack,
                 )
             case "if":
-                skip_operation, skip_jump_index = self.translate_construct()
-                skip_operation.offset = len(self.result) - skip_jump_index
-            case "loop":
-                condition_start: int = len(self.result)
-                skip_operation, skip_jump_index = self.translate_construct()
-                self.extend_result(
-                    JumpOperation(offset=condition_start - len(self.result) - 1)
+                self.translate_construct(
+                    loop=False, result_registry=result_registry, stack=stack
                 )
-                skip_operation.offset = len(self.result) - skip_jump_index
+                return
+            case "loop":
+                self.translate_construct(
+                    loop=True, result_registry=result_registry, stack=stack
+                )
+                return
             case "input":
                 self.extend_result(
                     MemoryOperation(
@@ -335,23 +407,38 @@ class Translator:
                     )
                 )
             case _:
+                template = SYMBOL_TO_COMPARATOR.get(header)
+                if template is not None:
+                    self.translate_comparator(
+                        template.data, result_registry=result_registry, stack=stack
+                    )
+                    return
+
                 operation_type = OPERATOR_TO_CODE.get(header)
                 if operation_type is None:
                     raise TranslationError(f"Unknown operation: '{header}'")
                 self.translate_operation(
                     operation_type, result_registry=result_registry, stack=stack
                 )
+
         self.check_closed_bracket()
 
-    def translate_blocks(self, allow_quit: bool = False) -> None:
+    def translate_blocks(
+        self,
+        allow_quit: bool = False,
+        result_registry: Registry = RA,
+        stack: bool = False,
+    ) -> None:
         """
         The main translator function to use on code-blocks
 
         :param allow_quit: only the top-level should be allowed to quit
+        :param result_registry:
+        :param stack:
         :return: None
         """
 
         while self.reader.has_next():
             if allow_quit and self.reader.current_or_closing().is_closing:
                 return
-            self.translate_valuable(stack=False)
+            self.translate_argument(result_registry=result_registry, stack=stack)

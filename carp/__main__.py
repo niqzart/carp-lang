@@ -55,7 +55,6 @@ def translate(
             + f"{symbol.line}:{symbol.char} "
             + f"({symbol.text}): {e}"
         )
-        raise e
 
 
 @app.command()

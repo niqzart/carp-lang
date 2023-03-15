@@ -13,7 +13,7 @@ from pytest_golden.plugin import (  # type: ignore
 from common.constants import INPUT_ADDRESS, OUTPUT_ADDRESS
 from common.errors import TranslationError
 from common.operations import OPERATOR_TO_CODE, BinaryOperation, Value
-from translator.comparators import SYMBOL_TO_COMPARATOR, ComparatorTemplate
+from translator.comparators import SYMBOL_TO_COMPARATOR
 from translator.parser import Symbol
 from translator.reader import Reader
 from translator.translator import Translator
@@ -254,39 +254,18 @@ def test_output(golden: GoldenTestFixtureFactory, translator: Translator) -> Non
 
 
 @pytest.mark.parametrize(
-    ("comparison", "compared", "data", "expected"),
+    ("name", "comparison"),
     [
         pytest.param(
+            "var",
             [THE_VARIABLE],
-            False,
-            ComparatorTemplate(zero=True, negated=False),
-            [
-                {
-                    "code": "load",
-                    "right": {"type": "registry", "code": "A"},
-                    "address": 16,
-                },
-            ],
             id="var",
         ),
     ]
     + [
         pytest.param(
+            name,
             ["(" + name, str(THE_INTEGER), str(THE_INTEGER), ")"],
-            True,
-            comparator,
-            [
-                {
-                    "code": "mov",
-                    "right": {"type": "registry", "code": "A"},
-                    "left": {"type": "value", "value": 1},
-                },
-                {
-                    "code": "mov",
-                    "right": {"type": "registry", "code": "B"},
-                    "left": {"type": "value", "value": 1},
-                },
-            ],
             id=name,
         )
         for name, comparator in SYMBOL_TO_COMPARATOR.items()
@@ -294,63 +273,34 @@ def test_output(golden: GoldenTestFixtureFactory, translator: Translator) -> Non
 )
 @pytest.mark.parametrize("construct", ("if", "loop"))
 def test_constructs(
+    golden: GoldenTestFixtureFactory,
     translator: Translator,
     construct: str,
-    compared: bool,
     comparison: list[str],
-    expected: list[dict[str, Any]],
-    data: ComparatorTemplate,
+    name: str,
 ) -> None:
-    offset_forward: int = int(construct == "loop")
-    offset_backward: int = -(4 + data.negated + compared - 2 + len(expected))
+    gold: GoldenTestFixture = golden.open(Path("constructs.yml"))
+
     translator.reader.symbols = [
         Symbol(text=symbol_text, line=0, char=0)
-        for symbol_text in ("(" + construct, *comparison, ")")
+        for symbol_text in ("(" + construct, *comparison, str(THE_VARIABLE), ")")
     ]
-    translator.translate_valuable()
+    translator.translate_valuable(stack=False)
 
-    real = [json.loads(operation.json()) for operation in translator.result]
-
-    if construct == "loop":
-        operation = real.pop()
-        assert operation.get("code") == "jb"
-        assert operation.get("offset") == offset_backward
-
-    if data.negated:
-        operation = real.pop()
-        assert operation.get("code") == "jb"
-        assert operation.get("offset") == offset_forward
-    operation = real.pop()
-    assert operation.get("code") == ("jz" if data.zero else "jn")
-    assert operation.get("offset") == (1 if data.negated else offset_forward)
-    if compared:
-        operation = real.pop()
-        assert operation.get("code") == ("pmc" if data.reverse else "cmp")
-
-    assert len(real) == len(expected)
-    for i in range(len(expected)):
-        assert real[i] == expected[i]
+    real = [operation.json() for operation in translator.result]
+    assert real == gold.out[f"{name}-{construct}"]
 
 
-@pytest.mark.parametrize(
-    ("name", "method"),
-    [
-        pytest.param("operation", Translator.translate_valuable, id="operation"),
-        pytest.param("comparator", Translator.translate_construct, id="comparator"),
-    ],
-)
 def test_unknown_header(
     translator: Translator,
     position: dict[str, int],
     assert_debug_symbol: Callable[[str], None],
-    name: str,
-    method: Callable[[Translator], None],
 ) -> None:
     operator: str = "!"
     translator.reader.symbols = [Symbol(text="(" + operator, **position)]
     with pytest.raises(TranslationError) as e:
-        method(translator)
-    assert str(e.value) == f"Unknown {name}: '{operator}'"
+        translator.translate_valuable()
+    assert str(e.value) == f"Unknown operation: '{operator}'"
     assert_debug_symbol("(" + operator)
 
 

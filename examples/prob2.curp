@@ -92,7 +92,7 @@
   },
   {
     "code": "jb",
-    "offset": 22
+    "offset": 24
   },
   {
     "code": "load",
@@ -233,7 +233,7 @@
   },
   {
     "code": "jb",
-    "offset": 4
+    "offset": 5
   },
   {
     "code": "load",
@@ -272,7 +272,22 @@
   },
   {
     "code": "jb",
-    "offset": -27
+    "offset": 1
+  },
+  {
+    "code": "mov",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "left": {
+      "type": "value",
+      "value": 0
+    }
+  },
+  {
+    "code": "jb",
+    "offset": -29
   },
   {
     "code": "load",

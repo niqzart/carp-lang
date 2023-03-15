@@ -32,12 +32,12 @@ class ComparatorTemplate(BaseModel):
 # (= a b) -> (!jz (comp a b)) -> jz +1; jb +skip
 # (<= a b) -> (jn (comp b a)) -> jn +skip
 # (< a b) -> (!jn (comp a b)) -> jn +1; jb +skip
-# (!= a b) -> (jz (comp a b)) -> jn +skip
+# (!= a b) -> (jz (comp a b)) -> jz +skip
 SYMBOL_TO_COMPARATOR: dict[str, ComparatorTemplate] = {
     ">=": ComparatorTemplate(zero=False, reverse=False, negated=False),
     "<": ComparatorTemplate(zero=False, reverse=False, negated=True),
     "<=": ComparatorTemplate(zero=False, reverse=True, negated=False),
     ">": ComparatorTemplate(zero=False, reverse=True, negated=True),
     "=": ComparatorTemplate(zero=True, negated=True),
-    "!=": ComparatorTemplate(zero=True, negated=True),
+    "!=": ComparatorTemplate(zero=True, negated=False),
 }

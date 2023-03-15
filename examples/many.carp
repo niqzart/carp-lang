@@ -1,1 +1,1 @@
-(output (assign a (output (% 11111 10000 1000))))
+(output (if (= 1 0) (input) (% 111111 100000 10000 1000)))
