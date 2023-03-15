@@ -44,7 +44,7 @@ class Translator:
     ) -> VarDef | str | int:
         if argument.is_quoted:
             if allow_strings:
-                return argument.text[1:-1]
+                return str(argument)
             raise TranslationError("Argument can't be a string")
         if argument.text.isdigit():
             return int(argument.text)

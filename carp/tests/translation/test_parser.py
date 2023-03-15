@@ -51,22 +51,23 @@ def test_parsing_splits(random_spaces: bool, source: str, expected: list[str]) -
 
 
 @pytest.mark.parametrize(
-    ("symbol_text", "expression", "quoted", "closing"),
+    ("symbol_text", "expected", "expression", "quoted", "closing"),
     [
-        pytest.param("1", False, False, False, id="simple"),
-        pytest.param("(input", True, False, False, id="expression"),
-        pytest.param('"hello"', False, True, False, id="quoted"),
-        pytest.param(")", False, False, True, id="closing"),
+        pytest.param("1", "1", False, False, False, id="simple"),
+        pytest.param("(input", "(input", True, False, False, id="expression"),
+        pytest.param('"hello"', "hello", False, True, False, id="quoted"),
+        pytest.param(r'"\n"', "\n", False, True, False, id="escaped"),
+        pytest.param(")", ")", False, False, True, id="closing"),
     ],
 )
 def test_symbols(
-    symbol_text: str, expression: bool, quoted: bool, closing: bool
+    symbol_text: str, expected: str, expression: bool, quoted: bool, closing: bool
 ) -> None:
     symbol = Symbol(text=symbol_text, line=0, char=0)
     assert symbol.is_expression == expression
     assert symbol.is_quoted == quoted
     assert symbol.is_closing == closing
-    assert str(symbol) == symbol_text
+    assert str(symbol) == expected
 
 
 @pytest.mark.parametrize(
