@@ -20,11 +20,11 @@ class ALU:
             pass
 
     operations: dict[ALUOperation, OperationProtocol] = {
-        ALUOperation.ADD: int.__add__,
-        ALUOperation.SUB: int.__sub__,
-        ALUOperation.MUL: int.__mul__,
-        ALUOperation.DIV: int.__floordiv__,
-        ALUOperation.MOD: int.__mod__,
+        ALUOperation.ADD: int.__add__,  # type: ignore
+        ALUOperation.SUB: int.__sub__,  # type: ignore
+        ALUOperation.MUL: int.__mul__,  # type: ignore
+        ALUOperation.DIV: int.__floordiv__,  # type: ignore
+        ALUOperation.MOD: int.__mod__,  # type: ignore
         ALUOperation.LEFT: lambda *args: args[0],
         ALUOperation.RIGHT: lambda *args: args[1],
     }

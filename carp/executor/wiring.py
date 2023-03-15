@@ -117,7 +117,6 @@ class DataPath:
 
     def record_state(self) -> LogRecord:
         """Logging/debugging function to record the full state of the DataPath"""
-        self.last_io = {}
         return LogRecord(
             registries=RegistriesRecord(
                 accumulator=self.accumulator,
@@ -131,8 +130,8 @@ class DataPath:
                 zero=self.alu.zero,
                 negative=self.alu.negative,
             ),
-            input_data=self.last_io.get(INPUT_ADDRESS),
-            output_data=self.last_io.get(OUTPUT_ADDRESS),
+            input_data=self.last_io.pop(INPUT_ADDRESS, None),
+            output_data=self.last_io.pop(OUTPUT_ADDRESS, None),
         )
 
     def get_output(self) -> list[int]:

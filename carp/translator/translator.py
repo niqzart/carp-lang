@@ -1,3 +1,6 @@
+from contextlib import contextmanager, nullcontext
+from typing import Any
+
 from common.constants import INPUT_ADDRESS, OUTPUT_ADDRESS
 from common.errors import TranslationError
 from common.operations import (
@@ -10,9 +13,11 @@ from common.operations import (
     RA,
     JumpOperation,
     OPERATOR_TO_CODE,
+    Registry,
 )
 from translator.comparators import SYMBOL_TO_COMPARATOR
-from translator.reader import Reader, Symbol
+from translator.parser import Symbol
+from translator.reader import Reader
 from translator.variables import VariableIndex, VarDef
 
 
@@ -43,7 +48,7 @@ class Translator:
     ) -> VarDef | str | int:
         if argument.is_quoted:
             if allow_strings:
-                return argument.text[1:-1]
+                return str(argument)
             raise TranslationError("Argument can't be a string")
         if argument.text.isdigit():
             return int(argument.text)
@@ -55,7 +60,11 @@ class Translator:
         return self._parse_argument(self.reader.next(), allow_strings=allow_strings)
 
     def translate_argument(
-        self, operation: OperationBase = None, allow_strings: bool = False
+        self,
+        operation: OperationBase | None = None,
+        result_registry: Registry = RA,
+        allow_strings: bool = False,
+        stack: bool = True,
     ) -> None:
         argument = self.parse_argument(allow_strings=allow_strings)
         if allow_strings and isinstance(argument, str):
@@ -63,6 +72,7 @@ class Translator:
                 self.extend_result(
                     BinaryOperation(
                         code=BinaryOperation.Code.MOVE_DATA,
+                        right=result_registry,
                         left=Value(value=ord(character)),
                     )
                 )
@@ -70,11 +80,12 @@ class Translator:
                     self.extend_result(operation)
             return
         if argument is None:
-            self.translate_valuable()
+            self.translate_valuable(result_registry=result_registry, stack=stack)
         elif isinstance(argument, int):
             self.extend_result(
                 BinaryOperation(
                     code=BinaryOperation.Code.MOVE_DATA,
+                    right=result_registry,
                     left=Value(value=argument),
                 )
             )
@@ -82,6 +93,7 @@ class Translator:
             self.extend_result(
                 MemoryOperation(
                     code=MemoryOperation.Code.LOAD_MEMORY,
+                    right=result_registry,
                     address=argument.location,
                 )
             )
@@ -97,7 +109,7 @@ class Translator:
             if template is None:
                 raise TranslationError(f"Unknown comparator: '{comparator}'")
             data = template.data
-            self.translate_operation(data.command)
+            self.translate_operation(data.command, stack=False)
             skip_operation = JumpOperation(code=data.jump)
             self.extend_result(skip_operation)
             if data.negated:
@@ -117,34 +129,29 @@ class Translator:
         self.translate_blocks(allow_quit=True)
         return skip_operation, skip_jump_index
 
-    def translate_operation(self, operation_type: BinaryOperation.Code) -> None:
-        self.translate_argument()
+    @contextmanager
+    def stack_save(self, reg: Registry) -> Any:
+        self.extend_result(StackOperation(code=StackOperation.Code.PUSH, right=reg))
+        yield
+        self.extend_result(StackOperation(code=StackOperation.Code.GRAB, right=reg))
 
-        right = self.parse_argument()
-        if right is None:
-            self.extend_result(StackOperation(code=StackOperation.Code.PUSH))
-            self.translate_valuable()
-            self.extend_result(
-                StackOperation(code=StackOperation.Code.GRAB, right=RB),
-                BinaryOperation(code=operation_type, right=RB, left=RA),
-            )
-            if operation_type != BinaryOperation.Code.COMPARE:
+    def translate_operation(
+        self,
+        operation_type: BinaryOperation.Code,
+        result_registry: Registry = RA,
+        stack: bool = True,
+    ) -> None:
+        self.translate_argument(result_registry=result_registry)
+        buffer_registry: Registry = RB if result_registry is RA else RA
+
+        with self.stack_save(buffer_registry) if stack else nullcontext():
+            while not self.reader.current_or_closing().is_closing:
+                self.translate_argument(result_registry=buffer_registry)
                 self.extend_result(
-                    BinaryOperation(code=BinaryOperation.Code.MOVE_DATA, left=RB)
+                    BinaryOperation(
+                        code=operation_type, right=result_registry, left=buffer_registry
+                    )
                 )
-        elif isinstance(right, int):
-            self.extend_result(
-                BinaryOperation(code=operation_type, left=Value(value=right))
-            )
-        elif isinstance(right, VarDef):
-            self.extend_result(
-                MemoryOperation(
-                    code=MemoryOperation.Code.LOAD_MEMORY,
-                    right=RB,
-                    address=right.location,
-                ),
-                BinaryOperation(code=operation_type, left=RB),
-            )
 
     def translate_output(self) -> None:
         itoc: Value = Value(value=48)
@@ -156,7 +163,7 @@ class Translator:
                 code=MemoryOperation.Code.SAVE_MEMORY,
                 address=OUTPUT_ADDRESS,
             ),
-            JumpOperation(code=JumpOperation.Code.JUMP_BECAUSE, offset=17),
+            JumpOperation(code=JumpOperation.Code.JUMP_BECAUSE, offset=18),
         )
         self.extend_result(  # handling negative
             JumpOperation(code=JumpOperation.Code.JUMP_NEGATIVE, offset=1),
@@ -229,9 +236,10 @@ class Translator:
                         address=OUTPUT_ADDRESS,
                     ),
                     allow_strings=True,
+                    stack=False,
                 )
             case "output":
-                self.translate_argument()
+                self.translate_argument(stack=False)
                 self.translate_output()
             case "assign":
                 var_name = self.reader.next().text
@@ -240,7 +248,8 @@ class Translator:
                     MemoryOperation(
                         code=MemoryOperation.Code.SAVE_MEMORY,
                         address=location,
-                    )
+                    ),
+                    stack=False,
                 )
             case "if":
                 skip_operation, skip_jump_index = self.translate_construct()
@@ -257,13 +266,16 @@ class Translator:
 
         self.check_closed_bracket()
 
-    def translate_valuable(self) -> None:
+    def translate_valuable(
+        self, result_registry: Registry = RA, stack: bool = True
+    ) -> None:
         header = self.reader.next_expression().text[1:]
 
         if header == "input":
             self.extend_result(
                 MemoryOperation(
                     code=MemoryOperation.Code.LOAD_MEMORY,
+                    right=result_registry,
                     address=INPUT_ADDRESS,
                 )
             )
@@ -271,7 +283,9 @@ class Translator:
             operation_type = OPERATOR_TO_CODE.get(header)
             if operation_type is None:
                 raise TranslationError(f"Unknown operation: '{header}'")
-            self.translate_operation(operation_type)
+            self.translate_operation(
+                operation_type, result_registry=result_registry, stack=stack
+            )
         self.check_closed_bracket()
 
     def translate_blocks(self, allow_quit: bool = False) -> None:

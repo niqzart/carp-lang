@@ -24,7 +24,7 @@ def translate(
 ) -> None:
     input_path = input_file.name.rpartition(".")[0]
     if output_path is None:
-        output_path = input_path + ".curp"
+        output_path = Path(input_path + ".curp")
 
     code = input_file.read()
     try:
@@ -32,7 +32,7 @@ def translate(
         print("Parsing successful")
         if save_parsed:
             parsed = [symbol.dict() for symbol in reader.symbols]
-            with open(input_path + ".cpar", "w", encoding="utf-8") as f:
+            with Path(input_path + ".cpar").open("w", encoding="utf-8") as f:
                 json.dump(parsed, f, indent=2)
             print(f"Parsing result saved to {input_path}.cpar")
     except ParserError as e:
@@ -43,7 +43,7 @@ def translate(
         translator.translate_blocks()
         compiled = [operation.dict() for operation in translator.result]
 
-        with open(output_path, "w", encoding="utf-8") as f:
+        with output_path.open("w", encoding="utf-8") as f:
             json.dump(compiled, f, indent=2)
         print("Compilation successful")
         print(f"Result has been saved to {output_path}")
@@ -81,18 +81,18 @@ def execute(
         control.main()
         result = "".join(chr(i) for i in data_path.get_output())
         if output_path:
-            with open(output_path, "w", encoding="utf-8") as f:
+            with output_path.open("w", encoding="utf-8") as f:
                 f.write(result)
         else:
             print(result)
-    except RuntimeError as e:
+    except (IndexError, RuntimeError) as e:
         control.save_state()
         print(f"Error: {e}")
         print("Run with --save-log to debug this")
 
     if save_log:
         log_path = instructions.name.rpartition(".")[0] + ".clog"
-        with open(log_path, "w", encoding="utf-8") as f:
+        with Path(log_path).open("w", encoding="utf-8") as f:
             json.dump([record.dict() for record in control.log], f, indent=2)
         print(f"Execution log saved to {log_path}")
 
@@ -100,8 +100,8 @@ def execute(
 @app.command()
 def generate_schema(output_path: Optional[Path] = Argument(None)) -> None:
     if output_path is None:
-        output_path = "docs/operation-schema.json"
-    with open(output_path, "w", encoding="utf-8") as f:
+        output_path = Path("docs/operation-schema.json")
+    with output_path.open("w", encoding="utf-8") as f:
         json.dump(Operation.schema(), f, indent=2)
 
 

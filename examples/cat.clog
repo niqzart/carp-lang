@@ -12,8 +12,8 @@
       "zero": true,
       "negative": false
     },
-    "input": null,
-    "output": null
+    "input_data": null,
+    "output_data": null
   },
   {
     "registries": {
@@ -38,8 +38,8 @@
       "zero": false,
       "negative": false
     },
-    "input": null,
-    "output": null
+    "input_data": null,
+    "output_data": null
   },
   {
     "registries": {
@@ -61,8 +61,8 @@
       "zero": false,
       "negative": false
     },
-    "input": null,
-    "output": null
+    "input_data": null,
+    "output_data": null
   },
   {
     "registries": {
@@ -84,8 +84,8 @@
       "zero": false,
       "negative": false
     },
-    "input": null,
-    "output": null
+    "input_data": null,
+    "output_data": null
   },
   {
     "registries": {
@@ -103,8 +103,8 @@
       "zero": false,
       "negative": false
     },
-    "input": null,
-    "output": null
+    "input_data": null,
+    "output_data": null
   },
   {
     "registries": {
@@ -126,8 +126,8 @@
       "zero": true,
       "negative": false
     },
-    "input": 0,
-    "output": null
+    "input_data": 0,
+    "output_data": null
   },
   {
     "registries": {
@@ -149,8 +149,8 @@
       "zero": true,
       "negative": false
     },
-    "input": null,
-    "output": null
+    "input_data": null,
+    "output_data": null
   },
   {
     "registries": {
@@ -172,8 +172,8 @@
       "zero": true,
       "negative": false
     },
-    "input": null,
-    "output": null
+    "input_data": null,
+    "output_data": null
   },
   {
     "registries": {
@@ -195,8 +195,8 @@
       "zero": true,
       "negative": false
     },
-    "input": null,
-    "output": 0
+    "input_data": null,
+    "output_data": 0
   },
   {
     "registries": {
@@ -214,8 +214,8 @@
       "zero": true,
       "negative": false
     },
-    "input": null,
-    "output": null
+    "input_data": null,
+    "output_data": null
   },
   {
     "registries": {
@@ -237,8 +237,8 @@
       "zero": true,
       "negative": false
     },
-    "input": null,
-    "output": null
+    "input_data": null,
+    "output_data": null
   },
   {
     "registries": {
@@ -256,7 +256,7 @@
       "zero": true,
       "negative": false
     },
-    "input": null,
-    "output": null
+    "input_data": null,
+    "output_data": null
   }
 ]

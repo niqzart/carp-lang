@@ -13,16 +13,19 @@ def alu() -> ALU:
 
 @pytest.mark.parametrize(
     ("operation", "function"),
-    [pytest.param(e.value, ALU.operations[e.value], id=e.name) for e in ALUOperation],
+    [
+        pytest.param(member, ALU.operations[member], id=name)
+        for name, member in ALUOperation.__members__.items()
+    ],
 )
 @pytest.mark.parametrize(("left", "right"), [(WORD_MAX_VALUE, 2), (WORD_MIN_VALUE, 4)])
 def test_alu(
-    alu,
+    alu: ALU,
     operation: ALUOperation,
     function: Callable[[int, int], int],
     left: int,
     right: int,
-):
+) -> None:
     alu.left = left
     alu.right = right
     alu.execute(operation)

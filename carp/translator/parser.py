@@ -29,6 +29,8 @@ class Symbol(BaseModel):
         return self.text == ")"
 
     def __str__(self) -> str:
+        if self.is_quoted:
+            return self.text[1:-1].replace(r"\n", "\n")
         return self.text
 
 

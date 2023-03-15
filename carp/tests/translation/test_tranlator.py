@@ -1,5 +1,7 @@
 import json
 from collections.abc import Callable
+from dataclasses import dataclass
+from typing import Any
 
 import pytest
 
@@ -12,13 +14,19 @@ from translator.reader import Reader
 from translator.translator import Translator
 
 
+# hack for mypy's typization
+@dataclass
+class FixtureRequest:
+    param: int
+
+
 @pytest.fixture(params=[pytest.param(i, id=f"line_{i}") for i in range(3)])
-def line(request) -> int:
+def line(request: FixtureRequest) -> int:
     return request.param
 
 
 @pytest.fixture(params=[pytest.param(i, id=f"char_{i}") for i in range(3)])
-def char(request) -> int:
+def char(request: FixtureRequest) -> int:
     return request.param
 
 
@@ -40,7 +48,9 @@ def translator(reader: Reader) -> Translator:
 
 
 @pytest.fixture
-def assert_debug_symbol(position, reader: Reader) -> Callable[[str], None]:
+def assert_debug_symbol(
+    position: dict[str, int], reader: Reader
+) -> Callable[[str], None]:
     def assert_debug_symbol_inner(expected_text: str) -> None:
         reader.back()
         debug_symbol: Symbol = reader.current_or_closing()
@@ -54,7 +64,7 @@ def assert_debug_symbol(position, reader: Reader) -> Callable[[str], None]:
 THE_INTEGER = 1
 THE_VARIABLE = "var"
 
-translated_arguments: dict[str, tuple[list[str], dict]] = {
+translated_arguments: dict[str, tuple[list[str], dict[str, Any]]] = {
     "integer": (
         [f"{THE_INTEGER}"],
         {
@@ -89,7 +99,9 @@ translated_arguments: dict[str, tuple[list[str], dict]] = {
         for key, (symbols, expected) in translated_arguments.items()
     ],
 )
-def test_arguments(translator, symbols: list[str], expected: dict):
+def test_arguments(
+    translator: Translator, symbols: list[str], expected: dict[str, Any]
+) -> None:
     translator.reader.symbols = [
         Symbol(text=symbol_text, line=0, char=0) for symbol_text in symbols
     ]
@@ -106,7 +118,11 @@ def test_arguments(translator, symbols: list[str], expected: dict):
     assert real[1] == additional_operation
 
 
-def test_deny_strings(translator, position, assert_debug_symbol):
+def test_deny_strings(
+    translator: Translator,
+    position: dict[str, int],
+    assert_debug_symbol: Callable[[str], None],
+) -> None:
     symbol_text: str = '"hello"'
     translator.reader.symbols = [Symbol(text=symbol_text, **position)]
     with pytest.raises(TranslationError) as e:
@@ -116,6 +132,7 @@ def test_deny_strings(translator, position, assert_debug_symbol):
 
 
 @pytest.mark.parametrize("operator", list(OPERATOR_TO_CODE))
+@pytest.mark.parametrize("stack", [True, False], ids=["stack", "top"])
 @pytest.mark.parametrize(
     ("second_arg_symbol", "second_arg_expected"),
     [
@@ -123,8 +140,13 @@ def test_deny_strings(translator, position, assert_debug_symbol):
             translated_arguments["integer"][0],
             [
                 {
-                    "right": {"type": "registry", "code": "A"},
+                    "right": {"type": "registry", "code": "B"},
                     "left": {"type": "value", "value": THE_INTEGER},
+                    "code": "mov",
+                },
+                {
+                    "right": {"type": "registry", "code": "A"},
+                    "left": {"type": "registry", "code": "B"},
                 },
             ],
             id="second_arg_integer",
@@ -148,20 +170,11 @@ def test_deny_strings(translator, position, assert_debug_symbol):
             translated_arguments["expression"][0],
             [
                 {
-                    "code": "push",
-                    "right": {"type": "registry", "code": "A"},
-                },
-                translated_arguments["expression"][1],
-                {
-                    "code": "grab",
+                    "code": "load",
                     "right": {"type": "registry", "code": "B"},
+                    "address": INPUT_ADDRESS,
                 },
                 {
-                    "right": {"type": "registry", "code": "B"},
-                    "left": {"type": "registry", "code": "A"},
-                },
-                {
-                    "code": "mov",
                     "right": {"type": "registry", "code": "A"},
                     "left": {"type": "registry", "code": "B"},
                 },
@@ -171,18 +184,25 @@ def test_deny_strings(translator, position, assert_debug_symbol):
     ],
 )
 def test_operators(
-    translator,
+    translator: Translator,
     operator: str,
+    stack: bool,
     second_arg_symbol: list[str],
-    second_arg_expected: list[dict],
-):
+    second_arg_expected: list[dict[str, Any]],
+) -> None:
     translator.reader.symbols = [
         Symbol(text=symbol_text, line=0, char=0)
         for symbol_text in ("(" + operator, str(THE_INTEGER), *second_arg_symbol, ")")
     ]
-    translator.translate_valuable()
+    translator.translate_valuable(stack=stack)
 
     real = [json.loads(operation.json()) for operation in translator.result]
+
+    if stack:
+        common = {"type": "registry", "code": "B"}
+        assert real.pop(1) == {"code": "push", "right": common}
+        assert real.pop() == {"code": "grab", "right": common}
+
     assert len(real) == 1 + len(second_arg_expected)
 
     assert real[0] == translated_arguments["integer"][1]
@@ -200,7 +220,7 @@ def test_operators(
         pytest.param(["(assign", THE_VARIABLE, str(THE_INTEGER), ")"], 16, id="assign"),
     ],
 )
-def test_commands(translator, command: list[str], address: int):
+def test_commands(translator: Translator, command: list[str], address: int) -> None:
     translator.reader.symbols = [
         Symbol(text=symbol_text, line=0, char=0) for symbol_text in command
     ]
@@ -213,6 +233,74 @@ def test_commands(translator, command: list[str], address: int):
         "right": {"type": "registry", "code": "A"},
         "address": address,
     }
+
+
+def test_output(translator: Translator) -> None:
+    translator.reader.symbols = [
+        Symbol(text=symbol_text, line=0, char=0)
+        for symbol_text in ("(output", THE_VARIABLE, ")")
+    ]
+    translator.translate_command()
+
+    real = [json.loads(operation.json()) for operation in translator.result]
+    assert real == [
+        {"code": "load", "right": {"type": "registry", "code": "A"}, "address": 16},
+        {"code": "jz", "offset": 1},
+        {"code": "jb", "offset": 3},
+        {
+            "code": "add",
+            "right": {"type": "registry", "code": "A"},
+            "left": {"type": "value", "value": 48},
+        },
+        {"code": "save", "right": {"type": "registry", "code": "A"}, "address": 3},
+        {"code": "jb", "offset": 18},
+        {"code": "jn", "offset": 1},
+        {"code": "jb", "offset": 3},
+        {
+            "code": "mov",
+            "right": {"type": "registry", "code": "B"},
+            "left": {"type": "value", "value": 45},
+        },
+        {"code": "save", "right": {"type": "registry", "code": "B"}, "address": 3},
+        {
+            "code": "mul",
+            "right": {"type": "registry", "code": "A"},
+            "left": {"type": "value", "value": -1},
+        },
+        {
+            "code": "mov",
+            "right": {"type": "registry", "code": "B"},
+            "left": {"type": "value", "value": 0},
+        },
+        {"code": "push", "right": {"type": "registry", "code": "B"}},
+        {
+            "code": "mov",
+            "right": {"type": "registry", "code": "B"},
+            "left": {"type": "registry", "code": "A"},
+        },
+        {"code": "jz", "offset": 5},
+        {
+            "code": "mod",
+            "right": {"type": "registry", "code": "B"},
+            "left": {"type": "value", "value": 10},
+        },
+        {
+            "code": "add",
+            "right": {"type": "registry", "code": "B"},
+            "left": {"type": "value", "value": 48},
+        },
+        {"code": "push", "right": {"type": "registry", "code": "B"}},
+        {
+            "code": "div",
+            "right": {"type": "registry", "code": "A"},
+            "left": {"type": "value", "value": 10},
+        },
+        {"code": "jb", "offset": -7},
+        {"code": "grab", "right": {"type": "registry", "code": "A"}},
+        {"code": "jz", "offset": 2},
+        {"code": "save", "right": {"type": "registry", "code": "A"}, "address": 3},
+        {"code": "jb", "offset": -4},
+    ]
 
 
 @pytest.mark.parametrize(
@@ -243,6 +331,11 @@ def test_commands(translator, command: list[str], address: int):
                     "right": {"type": "registry", "code": "A"},
                     "left": {"type": "value", "value": 1},
                 },
+                {
+                    "code": "mov",
+                    "right": {"type": "registry", "code": "B"},
+                    "left": {"type": "value", "value": 1},
+                },
             ],
             id=name,
         )
@@ -251,15 +344,15 @@ def test_commands(translator, command: list[str], address: int):
 )
 @pytest.mark.parametrize("construct", ("if", "loop"))
 def test_constructs(
-    translator,
+    translator: Translator,
     construct: str,
     compared: bool,
     comparison: list[str],
-    expected: list[dict],
+    expected: list[dict[str, Any]],
     data: ComparatorTemplate,
-):
+) -> None:
     offset_forward: int = int(construct == "loop")
-    offset_backward: int = -(3 + data.negated + compared)
+    offset_backward: int = -(4 + data.negated + compared - 2 + len(expected))
     translator.reader.symbols = [
         Symbol(text=symbol_text, line=0, char=0)
         for symbol_text in ("(" + construct, *comparison, ")")
@@ -298,12 +391,12 @@ def test_constructs(
     ],
 )
 def test_unknown_header(
-    translator,
-    position,
-    assert_debug_symbol,
+    translator: Translator,
+    position: dict[str, int],
+    assert_debug_symbol: Callable[[str], None],
     name: str,
     method: Callable[[Translator], None],
-):
+) -> None:
     operator: str = "!"
     translator.reader.symbols = [Symbol(text="(" + operator, **position)]
     with pytest.raises(TranslationError) as e:
@@ -312,7 +405,11 @@ def test_unknown_header(
     assert_debug_symbol("(" + operator)
 
 
-def test_blocks(translator, position, assert_debug_symbol):
+def test_blocks(
+    translator: Translator,
+    position: dict[str, int],
+    assert_debug_symbol: Callable[[str], None],
+) -> None:
     translator.translate_blocks()
     assert len(translator.result) == 0
 

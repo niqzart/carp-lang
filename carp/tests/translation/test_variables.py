@@ -19,7 +19,7 @@ def variables() -> VariableIndex:
         pytest.param("var_var", True, id="snaked"),
     ],
 )
-def test_variables(variables, name: str, valid: bool):
+def test_variables(variables: VariableIndex, name: str, valid: bool) -> None:
     if valid:
         with pytest.raises(TranslationError) as e:
             variables.read(name)

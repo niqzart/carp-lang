@@ -27,7 +27,7 @@ class Reader:
             raise TranslationError("Unexpected closing symbol")
         return result
 
-    def next_or_none(self) -> Symbol:
+    def next_or_none(self) -> Symbol | None:
         result = self.current_or_none()
         self.position += 1
         return result  # noqa: R504  # flake bug

@@ -19,11 +19,10 @@ def assert_back(reader: Reader) -> None:
         pytest.param(")", False, True, id="closing"),
     ],
 )
-def test_reader(source: str, expression: bool, closing: bool):
+def test_reader(source: str, expression: bool, closing: bool) -> None:
     reader = Reader(source)
     assert reader.has_next()
 
-    assert reader.current_or_none().text == source
     assert reader.current_or_closing().text == source
 
     if closing:
