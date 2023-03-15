@@ -245,7 +245,8 @@ Options:
 ### Тесты
 - Тесты написаны на pytest
 - Unit-тесты, покрывающие все индивидуальные части ([translation](./carp/tests/translation) и [execution](./carp/tests/execution))
-- Интеграционные тесты используют подготовленные команды и запускают проект также, как запускал бы пользователь ([integrational](./carp/tests/integrational))  <!-- TODO mark the use of golden tests -->
+- Интеграционные тесты используют подготовленные команды и запускают проект также, как запускал бы пользователь ([integrational](./carp/tests/integrational))
+- Интеграционные тесты используют golden-тестирование, обновить вывод: `pytest tests/integrational --update-goldens`
 - Запустить все тесты (из папки `carp`): `pytest tests --cov=.`
 - При прогоне также считается покрытие
 
