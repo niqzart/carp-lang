@@ -216,7 +216,7 @@ Options:
 - control-unit, управляющий всеми циклами процессора, реализован в [`executor.control`](./carp/executor/control.py)
 
 ### Схема
-<img src="./docs/processor-model.drawio.png"/>
+<img src="./docs/processor-model.drawio.svg"/>
 
 ### Циклы ControlUnit
 - Instruction Fetch — получает текущую инструкцию, чтобы её выполнить
@@ -258,7 +258,7 @@ Options:
 - Все линтеры и тесты включены в [github-pipeline](./.github/workflows/main-check.yml)
 - Используется написанный мной open-source [callable workflow](https://github.com/niqzart/ca-actions)
 
-### Таблица трёх алгоритмов
+### Таблица трёх+ алгоритмов
 |      ФИО      | алг.  | LoC | code инстр. | инстр. |
 |:-------------:|:-----:|:---:|:-----------:|:------:|
 | Нестеров Н.К. | hello |  1  |     22      |   23   |
