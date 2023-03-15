@@ -240,6 +240,7 @@ Options:
 - Настроен mypy в строгом режиме (со всеми опциональными проверками)
 - Настройки линтеров и coverage лежат в [setup.cfg](./setup.cfg)
 - Все линтеры и тесты включены в [github-pipeline](./.github/workflows/main-check.yml)
+- Используется написанный мной open-source [callable workflow](https://github.com/niqzart/ca-actions)
 
 ### Таблица трёх алгоритмов
 |      ФИО      | алг.  | LoC | code инстр. | инстр. |

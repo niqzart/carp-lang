@@ -2,52 +2,14 @@ name: Common Pipeline Steps
 
 on:
   push:
+  workflow_dispatch:
 
 jobs:
   prepare:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          submodules: recursive
-
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.11
-          cache: pip
-
-      - id: install
-        name: Install Requirements
-        run: pip install -r requirements-dev.txt
-
-      - name: Run pytest
-        run: |
-          cd carp
-          pytest tests -p no:cacheprovider --cov=.
-
-      - name: Report test coverage
-        if: inputs.coverage
-        run: coverage report --rcfile=../setup.cfg
-
-      - id: flake8
-        if: success() || (failure() && steps.install.conclusion == 'success')
-        name: Lint with flake8
-        run: flake8 --config=setup.cfg carp
-
-      - id: mypy
-        if: success() || (failure() && steps.install.conclusion == 'success')
-        name: Lint with mypy
-        run: mypy carp --config-file=setup.cfg
-
-      - id: isort
-        if: success() || (failure() && steps.install.conclusion == 'success')
-        name: Check import ordering with isort
-        run: isort carp --check --diff
-
-      - id: black
-        if: success() || (failure() && steps.install.conclusion == 'success')
-        name: Check formatting with black
-        run: black carp --check
+    uses: niqzart/ca-actions/.github/workflows/full-workflow.yml@v1.0
+    with:
+      python_version: 3.11
+      install_command: pip install -r requirements-dev.txt
+      lint_directory: carp
+      config_file: setup.cfg
+      pytest_workdir: carp
