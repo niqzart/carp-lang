@@ -66,6 +66,15 @@ class Translator:
         allow_strings: bool = False,
         stack: bool = True,
     ) -> None:
+        """
+        Extract argument from reader and adds its operations to result
+
+        :param operation: an operation to execute after
+        :param result_registry: registry to put the result into
+        :param allow_strings: use if argument is allowed to be a string
+        :param stack: will be passed to :py:meth:`translate_valuable` if needed
+        :return: None
+        """
         argument = self.parse_argument(allow_strings=allow_strings)
         if allow_strings and isinstance(argument, str):
             for character in argument:
@@ -131,6 +140,11 @@ class Translator:
 
     @contextmanager
     def stack_save(self, reg: Registry) -> Any:
+        """
+        Helper context manager to temporarily save value of a registry in stack
+
+        :param reg: the :py:class:`Registry` to save
+        """
         self.extend_result(StackOperation(code=StackOperation.Code.PUSH, right=reg))
         yield
         self.extend_result(StackOperation(code=StackOperation.Code.GRAB, right=reg))
@@ -141,6 +155,15 @@ class Translator:
         result_registry: Registry = RA,
         stack: bool = True,
     ) -> None:
+        """
+        Translates a binary operation and adds its operations to result
+
+        :param operation_type: operation's code
+        :param result_registry: registry to put the result into
+          the other one will be used as a buffer with stack-protection
+        :param stack: if True, the initial buffer's value will be saved
+        :return: None
+        """
         self.translate_argument(result_registry=result_registry)
         buffer_registry: Registry = RB if result_registry is RA else RA
 
@@ -154,6 +177,10 @@ class Translator:
                 )
 
     def translate_output(self, registry: Registry) -> None:
+        """
+        Translates the output operation
+        """
+
         buffer_registry: Registry = RB if registry is RA else RA
 
         itoc: Value = Value(value=48)
@@ -255,6 +282,13 @@ class Translator:
     def translate_valuable(
         self, result_registry: Registry = RA, stack: bool = True
     ) -> None:
+        """
+        Translates a valuable (any expression)
+
+        :param result_registry:
+        :param stack: will be passed to :py:meth:`translate_valuable` if needed
+        :return: None
+        """
         header = self.reader.next_expression().text[1:]
 
         match header:
@@ -310,6 +344,13 @@ class Translator:
         self.check_closed_bracket()
 
     def translate_blocks(self, allow_quit: bool = False) -> None:
+        """
+        The main translator function to use on code-blocks
+
+        :param allow_quit: only the top-level should be allowed to quit
+        :return: None
+        """
+
         while self.reader.has_next():
             if allow_quit and self.reader.current_or_closing().is_closing:
                 return
