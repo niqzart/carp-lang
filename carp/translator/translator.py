@@ -157,7 +157,7 @@ class Translator:
                 code=MemoryOperation.Code.SAVE_MEMORY,
                 address=OUTPUT_ADDRESS,
             ),
-            JumpOperation(code=JumpOperation.Code.JUMP_BECAUSE, offset=17),
+            JumpOperation(code=JumpOperation.Code.JUMP_BECAUSE, offset=18),
         )
         self.extend_result(  # handling negative
             JumpOperation(code=JumpOperation.Code.JUMP_NEGATIVE, offset=1),
