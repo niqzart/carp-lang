@@ -85,7 +85,7 @@ def execute(
                 f.write(result)
         else:
             print(result)
-    except RuntimeError as e:
+    except (IndexError, RuntimeError) as e:
         control.save_state()
         print(f"Error: {e}")
         print("Run with --save-log to debug this")

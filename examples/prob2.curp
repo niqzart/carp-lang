@@ -65,14 +65,25 @@
     "address": 17
   },
   {
+    "code": "mov",
+    "right": {
+      "type": "registry",
+      "code": "B"
+    },
+    "left": {
+      "type": "value",
+      "value": 4000000
+    }
+  },
+  {
     "code": "cmp",
     "right": {
       "type": "registry",
       "code": "A"
     },
     "left": {
-      "type": "value",
-      "value": 4000000
+      "type": "registry",
+      "code": "B"
     }
   },
   {
@@ -81,7 +92,7 @@
   },
   {
     "code": "jb",
-    "offset": 18
+    "offset": 22
   },
   {
     "code": "load",
@@ -159,14 +170,50 @@
     "address": 19
   },
   {
+    "code": "push",
+    "right": {
+      "type": "registry",
+      "code": "B"
+    }
+  },
+  {
+    "code": "mov",
+    "right": {
+      "type": "registry",
+      "code": "B"
+    },
+    "left": {
+      "type": "value",
+      "value": 2
+    }
+  },
+  {
     "code": "mod",
     "right": {
       "type": "registry",
       "code": "A"
     },
     "left": {
+      "type": "registry",
+      "code": "B"
+    }
+  },
+  {
+    "code": "grab",
+    "right": {
+      "type": "registry",
+      "code": "B"
+    }
+  },
+  {
+    "code": "mov",
+    "right": {
+      "type": "registry",
+      "code": "B"
+    },
+    "left": {
       "type": "value",
-      "value": 2
+      "value": 0
     }
   },
   {
@@ -176,8 +223,8 @@
       "code": "A"
     },
     "left": {
-      "type": "value",
-      "value": 0
+      "type": "registry",
+      "code": "B"
     }
   },
   {
@@ -225,7 +272,7 @@
   },
   {
     "code": "jb",
-    "offset": -22
+    "offset": -27
   },
   {
     "code": "load",
@@ -264,7 +311,7 @@
   },
   {
     "code": "jb",
-    "offset": 17
+    "offset": 18
   },
   {
     "code": "jn",

@@ -132,6 +132,7 @@ def test_deny_strings(
 
 
 @pytest.mark.parametrize("operator", list(OPERATOR_TO_CODE))
+@pytest.mark.parametrize("stack", [True, False], ids=["stack", "top"])
 @pytest.mark.parametrize(
     ("second_arg_symbol", "second_arg_expected"),
     [
@@ -139,8 +140,13 @@ def test_deny_strings(
             translated_arguments["integer"][0],
             [
                 {
-                    "right": {"type": "registry", "code": "A"},
+                    "right": {"type": "registry", "code": "B"},
                     "left": {"type": "value", "value": THE_INTEGER},
+                    "code": "mov",
+                },
+                {
+                    "right": {"type": "registry", "code": "A"},
+                    "left": {"type": "registry", "code": "B"},
                 },
             ],
             id="second_arg_integer",
@@ -164,20 +170,11 @@ def test_deny_strings(
             translated_arguments["expression"][0],
             [
                 {
-                    "code": "push",
-                    "right": {"type": "registry", "code": "A"},
-                },
-                translated_arguments["expression"][1],
-                {
-                    "code": "grab",
+                    "code": "load",
                     "right": {"type": "registry", "code": "B"},
+                    "address": INPUT_ADDRESS,
                 },
                 {
-                    "right": {"type": "registry", "code": "B"},
-                    "left": {"type": "registry", "code": "A"},
-                },
-                {
-                    "code": "mov",
                     "right": {"type": "registry", "code": "A"},
                     "left": {"type": "registry", "code": "B"},
                 },
@@ -189,6 +186,7 @@ def test_deny_strings(
 def test_operators(
     translator: Translator,
     operator: str,
+    stack: bool,
     second_arg_symbol: list[str],
     second_arg_expected: list[dict[str, Any]],
 ) -> None:
@@ -196,9 +194,15 @@ def test_operators(
         Symbol(text=symbol_text, line=0, char=0)
         for symbol_text in ("(" + operator, str(THE_INTEGER), *second_arg_symbol, ")")
     ]
-    translator.translate_valuable()
+    translator.translate_valuable(stack=stack)
 
     real = [json.loads(operation.json()) for operation in translator.result]
+
+    if stack:
+        common = {"type": "registry", "code": "B"}
+        assert real.pop(1) == {"code": "push", "right": common}
+        assert real.pop() == {"code": "grab", "right": common}
+
     assert len(real) == 1 + len(second_arg_expected)
 
     assert real[0] == translated_arguments["integer"][1]
@@ -327,6 +331,11 @@ def test_output(translator: Translator) -> None:
                     "right": {"type": "registry", "code": "A"},
                     "left": {"type": "value", "value": 1},
                 },
+                {
+                    "code": "mov",
+                    "right": {"type": "registry", "code": "B"},
+                    "left": {"type": "value", "value": 1},
+                },
             ],
             id=name,
         )
@@ -343,7 +352,7 @@ def test_constructs(
     data: ComparatorTemplate,
 ) -> None:
     offset_forward: int = int(construct == "loop")
-    offset_backward: int = -(3 + data.negated + compared)
+    offset_backward: int = -(4 + data.negated + compared - 2 + len(expected))
     translator.reader.symbols = [
         Symbol(text=symbol_text, line=0, char=0)
         for symbol_text in ("(" + construct, *comparison, ")")
