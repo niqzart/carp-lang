@@ -283,6 +283,24 @@
     "address": 18
   },
   {
+    "code": "push",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    }
+  },
+  {
+    "code": "mov",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "left": {
+      "type": "registry",
+      "code": "A"
+    }
+  },
+  {
     "code": "jz",
     "offset": 1
   },
@@ -450,5 +468,31 @@
   {
     "code": "jb",
     "offset": -4
+  },
+  {
+    "code": "mov",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "left": {
+      "type": "value",
+      "value": 10
+    }
+  },
+  {
+    "code": "save",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 3
+  },
+  {
+    "code": "grab",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    }
   }
 ]

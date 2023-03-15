@@ -19,7 +19,6 @@ def check_output(*args: str) -> str:
     )
 
 
-@pytest.mark.skip()
 @pytest.mark.parametrize(
     ("program_name", "file_in", "expected"),
     [

@@ -37181,8 +37181,56 @@ prob2_clog: |-
         "accumulator": 4613732,
         "buffer": 4000000,
         "memory_pointer": 18,
-        "stack_pointer": 100,
+        "stack_pointer": 99,
         "instruction_pointer": 35,
+        "command_data": {
+          "code": "push",
+          "right": {
+            "type": "registry",
+            "code": "A"
+          }
+        }
+      },
+      "flags": {
+        "zero": false,
+        "negative": false
+      },
+      "input_data": null,
+      "output_data": null
+    },
+    {
+      "registries": {
+        "accumulator": 4613732,
+        "buffer": 4000000,
+        "memory_pointer": 18,
+        "stack_pointer": 99,
+        "instruction_pointer": 36,
+        "command_data": {
+          "code": "mov",
+          "right": {
+            "type": "registry",
+            "code": "A"
+          },
+          "left": {
+            "type": "registry",
+            "code": "A"
+          }
+        }
+      },
+      "flags": {
+        "zero": false,
+        "negative": false
+      },
+      "input_data": null,
+      "output_data": null
+    },
+    {
+      "registries": {
+        "accumulator": 4613732,
+        "buffer": 4000000,
+        "memory_pointer": 18,
+        "stack_pointer": 99,
+        "instruction_pointer": 37,
         "command_data": {
           "code": "jz",
           "offset": 1
@@ -37200,8 +37248,8 @@ prob2_clog: |-
         "accumulator": 4613732,
         "buffer": 4000000,
         "memory_pointer": 18,
-        "stack_pointer": 100,
-        "instruction_pointer": 39,
+        "stack_pointer": 99,
+        "instruction_pointer": 41,
         "command_data": {
           "code": "jb",
           "offset": 3
@@ -37219,8 +37267,8 @@ prob2_clog: |-
         "accumulator": 4613732,
         "buffer": 4000000,
         "memory_pointer": 18,
-        "stack_pointer": 100,
-        "instruction_pointer": 40,
+        "stack_pointer": 99,
+        "instruction_pointer": 42,
         "command_data": {
           "code": "jn",
           "offset": 1
@@ -37238,8 +37286,8 @@ prob2_clog: |-
         "accumulator": 4613732,
         "buffer": 4000000,
         "memory_pointer": 18,
-        "stack_pointer": 100,
-        "instruction_pointer": 44,
+        "stack_pointer": 99,
+        "instruction_pointer": 46,
         "command_data": {
           "code": "jb",
           "offset": 3
@@ -37257,8 +37305,8 @@ prob2_clog: |-
         "accumulator": 4613732,
         "buffer": 0,
         "memory_pointer": 18,
-        "stack_pointer": 100,
-        "instruction_pointer": 45,
+        "stack_pointer": 99,
+        "instruction_pointer": 47,
         "command_data": {
           "code": "mov",
           "right": {
@@ -37283,8 +37331,8 @@ prob2_clog: |-
         "accumulator": 4613732,
         "buffer": 0,
         "memory_pointer": 18,
-        "stack_pointer": 99,
-        "instruction_pointer": 46,
+        "stack_pointer": 98,
+        "instruction_pointer": 48,
         "command_data": {
           "code": "push",
           "right": {
@@ -37305,8 +37353,8 @@ prob2_clog: |-
         "accumulator": 4613732,
         "buffer": 4613732,
         "memory_pointer": 18,
-        "stack_pointer": 99,
-        "instruction_pointer": 47,
+        "stack_pointer": 98,
+        "instruction_pointer": 49,
         "command_data": {
           "code": "mov",
           "right": {
@@ -37331,8 +37379,8 @@ prob2_clog: |-
         "accumulator": 4613732,
         "buffer": 4613732,
         "memory_pointer": 18,
-        "stack_pointer": 99,
-        "instruction_pointer": 48,
+        "stack_pointer": 98,
+        "instruction_pointer": 50,
         "command_data": {
           "code": "jz",
           "offset": 5
@@ -37350,8 +37398,8 @@ prob2_clog: |-
         "accumulator": 4613732,
         "buffer": 2,
         "memory_pointer": 18,
-        "stack_pointer": 99,
-        "instruction_pointer": 49,
+        "stack_pointer": 98,
+        "instruction_pointer": 51,
         "command_data": {
           "code": "mod",
           "right": {
@@ -37376,8 +37424,8 @@ prob2_clog: |-
         "accumulator": 4613732,
         "buffer": 50,
         "memory_pointer": 18,
-        "stack_pointer": 99,
-        "instruction_pointer": 50,
+        "stack_pointer": 98,
+        "instruction_pointer": 52,
         "command_data": {
           "code": "add",
           "right": {
@@ -37402,8 +37450,8 @@ prob2_clog: |-
         "accumulator": 4613732,
         "buffer": 50,
         "memory_pointer": 18,
-        "stack_pointer": 98,
-        "instruction_pointer": 51,
+        "stack_pointer": 97,
+        "instruction_pointer": 53,
         "command_data": {
           "code": "push",
           "right": {
@@ -37424,8 +37472,8 @@ prob2_clog: |-
         "accumulator": 461373,
         "buffer": 50,
         "memory_pointer": 18,
-        "stack_pointer": 98,
-        "instruction_pointer": 52,
+        "stack_pointer": 97,
+        "instruction_pointer": 54,
         "command_data": {
           "code": "div",
           "right": {
@@ -37450,8 +37498,8 @@ prob2_clog: |-
         "accumulator": 461373,
         "buffer": 50,
         "memory_pointer": 18,
-        "stack_pointer": 98,
-        "instruction_pointer": 46,
+        "stack_pointer": 97,
+        "instruction_pointer": 48,
         "command_data": {
           "code": "jb",
           "offset": -7
@@ -37469,8 +37517,8 @@ prob2_clog: |-
         "accumulator": 461373,
         "buffer": 461373,
         "memory_pointer": 18,
-        "stack_pointer": 98,
-        "instruction_pointer": 47,
+        "stack_pointer": 97,
+        "instruction_pointer": 49,
         "command_data": {
           "code": "mov",
           "right": {
@@ -37495,8 +37543,8 @@ prob2_clog: |-
         "accumulator": 461373,
         "buffer": 461373,
         "memory_pointer": 18,
-        "stack_pointer": 98,
-        "instruction_pointer": 48,
+        "stack_pointer": 97,
+        "instruction_pointer": 50,
         "command_data": {
           "code": "jz",
           "offset": 5
@@ -37514,8 +37562,8 @@ prob2_clog: |-
         "accumulator": 461373,
         "buffer": 3,
         "memory_pointer": 18,
-        "stack_pointer": 98,
-        "instruction_pointer": 49,
+        "stack_pointer": 97,
+        "instruction_pointer": 51,
         "command_data": {
           "code": "mod",
           "right": {
@@ -37540,8 +37588,8 @@ prob2_clog: |-
         "accumulator": 461373,
         "buffer": 51,
         "memory_pointer": 18,
-        "stack_pointer": 98,
-        "instruction_pointer": 50,
+        "stack_pointer": 97,
+        "instruction_pointer": 52,
         "command_data": {
           "code": "add",
           "right": {
@@ -37566,8 +37614,8 @@ prob2_clog: |-
         "accumulator": 461373,
         "buffer": 51,
         "memory_pointer": 18,
-        "stack_pointer": 97,
-        "instruction_pointer": 51,
+        "stack_pointer": 96,
+        "instruction_pointer": 53,
         "command_data": {
           "code": "push",
           "right": {
@@ -37588,8 +37636,8 @@ prob2_clog: |-
         "accumulator": 46137,
         "buffer": 51,
         "memory_pointer": 18,
-        "stack_pointer": 97,
-        "instruction_pointer": 52,
+        "stack_pointer": 96,
+        "instruction_pointer": 54,
         "command_data": {
           "code": "div",
           "right": {
@@ -37614,8 +37662,8 @@ prob2_clog: |-
         "accumulator": 46137,
         "buffer": 51,
         "memory_pointer": 18,
-        "stack_pointer": 97,
-        "instruction_pointer": 46,
+        "stack_pointer": 96,
+        "instruction_pointer": 48,
         "command_data": {
           "code": "jb",
           "offset": -7
@@ -37633,8 +37681,8 @@ prob2_clog: |-
         "accumulator": 46137,
         "buffer": 46137,
         "memory_pointer": 18,
-        "stack_pointer": 97,
-        "instruction_pointer": 47,
+        "stack_pointer": 96,
+        "instruction_pointer": 49,
         "command_data": {
           "code": "mov",
           "right": {
@@ -37659,8 +37707,8 @@ prob2_clog: |-
         "accumulator": 46137,
         "buffer": 46137,
         "memory_pointer": 18,
-        "stack_pointer": 97,
-        "instruction_pointer": 48,
+        "stack_pointer": 96,
+        "instruction_pointer": 50,
         "command_data": {
           "code": "jz",
           "offset": 5
@@ -37678,8 +37726,8 @@ prob2_clog: |-
         "accumulator": 46137,
         "buffer": 7,
         "memory_pointer": 18,
-        "stack_pointer": 97,
-        "instruction_pointer": 49,
+        "stack_pointer": 96,
+        "instruction_pointer": 51,
         "command_data": {
           "code": "mod",
           "right": {
@@ -37704,8 +37752,8 @@ prob2_clog: |-
         "accumulator": 46137,
         "buffer": 55,
         "memory_pointer": 18,
-        "stack_pointer": 97,
-        "instruction_pointer": 50,
+        "stack_pointer": 96,
+        "instruction_pointer": 52,
         "command_data": {
           "code": "add",
           "right": {
@@ -37730,8 +37778,8 @@ prob2_clog: |-
         "accumulator": 46137,
         "buffer": 55,
         "memory_pointer": 18,
-        "stack_pointer": 96,
-        "instruction_pointer": 51,
+        "stack_pointer": 95,
+        "instruction_pointer": 53,
         "command_data": {
           "code": "push",
           "right": {
@@ -37752,8 +37800,8 @@ prob2_clog: |-
         "accumulator": 4613,
         "buffer": 55,
         "memory_pointer": 18,
-        "stack_pointer": 96,
-        "instruction_pointer": 52,
+        "stack_pointer": 95,
+        "instruction_pointer": 54,
         "command_data": {
           "code": "div",
           "right": {
@@ -37778,8 +37826,8 @@ prob2_clog: |-
         "accumulator": 4613,
         "buffer": 55,
         "memory_pointer": 18,
-        "stack_pointer": 96,
-        "instruction_pointer": 46,
+        "stack_pointer": 95,
+        "instruction_pointer": 48,
         "command_data": {
           "code": "jb",
           "offset": -7
@@ -37797,8 +37845,8 @@ prob2_clog: |-
         "accumulator": 4613,
         "buffer": 4613,
         "memory_pointer": 18,
-        "stack_pointer": 96,
-        "instruction_pointer": 47,
+        "stack_pointer": 95,
+        "instruction_pointer": 49,
         "command_data": {
           "code": "mov",
           "right": {
@@ -37823,8 +37871,8 @@ prob2_clog: |-
         "accumulator": 4613,
         "buffer": 4613,
         "memory_pointer": 18,
-        "stack_pointer": 96,
-        "instruction_pointer": 48,
+        "stack_pointer": 95,
+        "instruction_pointer": 50,
         "command_data": {
           "code": "jz",
           "offset": 5
@@ -37842,8 +37890,8 @@ prob2_clog: |-
         "accumulator": 4613,
         "buffer": 3,
         "memory_pointer": 18,
-        "stack_pointer": 96,
-        "instruction_pointer": 49,
+        "stack_pointer": 95,
+        "instruction_pointer": 51,
         "command_data": {
           "code": "mod",
           "right": {
@@ -37868,8 +37916,8 @@ prob2_clog: |-
         "accumulator": 4613,
         "buffer": 51,
         "memory_pointer": 18,
-        "stack_pointer": 96,
-        "instruction_pointer": 50,
+        "stack_pointer": 95,
+        "instruction_pointer": 52,
         "command_data": {
           "code": "add",
           "right": {
@@ -37894,8 +37942,8 @@ prob2_clog: |-
         "accumulator": 4613,
         "buffer": 51,
         "memory_pointer": 18,
-        "stack_pointer": 95,
-        "instruction_pointer": 51,
+        "stack_pointer": 94,
+        "instruction_pointer": 53,
         "command_data": {
           "code": "push",
           "right": {
@@ -37916,8 +37964,8 @@ prob2_clog: |-
         "accumulator": 461,
         "buffer": 51,
         "memory_pointer": 18,
-        "stack_pointer": 95,
-        "instruction_pointer": 52,
+        "stack_pointer": 94,
+        "instruction_pointer": 54,
         "command_data": {
           "code": "div",
           "right": {
@@ -37942,8 +37990,8 @@ prob2_clog: |-
         "accumulator": 461,
         "buffer": 51,
         "memory_pointer": 18,
-        "stack_pointer": 95,
-        "instruction_pointer": 46,
+        "stack_pointer": 94,
+        "instruction_pointer": 48,
         "command_data": {
           "code": "jb",
           "offset": -7
@@ -37961,8 +38009,8 @@ prob2_clog: |-
         "accumulator": 461,
         "buffer": 461,
         "memory_pointer": 18,
-        "stack_pointer": 95,
-        "instruction_pointer": 47,
+        "stack_pointer": 94,
+        "instruction_pointer": 49,
         "command_data": {
           "code": "mov",
           "right": {
@@ -37987,8 +38035,8 @@ prob2_clog: |-
         "accumulator": 461,
         "buffer": 461,
         "memory_pointer": 18,
-        "stack_pointer": 95,
-        "instruction_pointer": 48,
+        "stack_pointer": 94,
+        "instruction_pointer": 50,
         "command_data": {
           "code": "jz",
           "offset": 5
@@ -38006,8 +38054,8 @@ prob2_clog: |-
         "accumulator": 461,
         "buffer": 1,
         "memory_pointer": 18,
-        "stack_pointer": 95,
-        "instruction_pointer": 49,
+        "stack_pointer": 94,
+        "instruction_pointer": 51,
         "command_data": {
           "code": "mod",
           "right": {
@@ -38032,8 +38080,8 @@ prob2_clog: |-
         "accumulator": 461,
         "buffer": 49,
         "memory_pointer": 18,
-        "stack_pointer": 95,
-        "instruction_pointer": 50,
+        "stack_pointer": 94,
+        "instruction_pointer": 52,
         "command_data": {
           "code": "add",
           "right": {
@@ -38058,8 +38106,8 @@ prob2_clog: |-
         "accumulator": 461,
         "buffer": 49,
         "memory_pointer": 18,
-        "stack_pointer": 94,
-        "instruction_pointer": 51,
+        "stack_pointer": 93,
+        "instruction_pointer": 53,
         "command_data": {
           "code": "push",
           "right": {
@@ -38080,8 +38128,8 @@ prob2_clog: |-
         "accumulator": 46,
         "buffer": 49,
         "memory_pointer": 18,
-        "stack_pointer": 94,
-        "instruction_pointer": 52,
+        "stack_pointer": 93,
+        "instruction_pointer": 54,
         "command_data": {
           "code": "div",
           "right": {
@@ -38106,8 +38154,8 @@ prob2_clog: |-
         "accumulator": 46,
         "buffer": 49,
         "memory_pointer": 18,
-        "stack_pointer": 94,
-        "instruction_pointer": 46,
+        "stack_pointer": 93,
+        "instruction_pointer": 48,
         "command_data": {
           "code": "jb",
           "offset": -7
@@ -38125,8 +38173,8 @@ prob2_clog: |-
         "accumulator": 46,
         "buffer": 46,
         "memory_pointer": 18,
-        "stack_pointer": 94,
-        "instruction_pointer": 47,
+        "stack_pointer": 93,
+        "instruction_pointer": 49,
         "command_data": {
           "code": "mov",
           "right": {
@@ -38151,8 +38199,8 @@ prob2_clog: |-
         "accumulator": 46,
         "buffer": 46,
         "memory_pointer": 18,
-        "stack_pointer": 94,
-        "instruction_pointer": 48,
+        "stack_pointer": 93,
+        "instruction_pointer": 50,
         "command_data": {
           "code": "jz",
           "offset": 5
@@ -38170,8 +38218,8 @@ prob2_clog: |-
         "accumulator": 46,
         "buffer": 6,
         "memory_pointer": 18,
-        "stack_pointer": 94,
-        "instruction_pointer": 49,
+        "stack_pointer": 93,
+        "instruction_pointer": 51,
         "command_data": {
           "code": "mod",
           "right": {
@@ -38196,8 +38244,8 @@ prob2_clog: |-
         "accumulator": 46,
         "buffer": 54,
         "memory_pointer": 18,
-        "stack_pointer": 94,
-        "instruction_pointer": 50,
+        "stack_pointer": 93,
+        "instruction_pointer": 52,
         "command_data": {
           "code": "add",
           "right": {
@@ -38222,8 +38270,8 @@ prob2_clog: |-
         "accumulator": 46,
         "buffer": 54,
         "memory_pointer": 18,
-        "stack_pointer": 93,
-        "instruction_pointer": 51,
+        "stack_pointer": 92,
+        "instruction_pointer": 53,
         "command_data": {
           "code": "push",
           "right": {
@@ -38244,8 +38292,8 @@ prob2_clog: |-
         "accumulator": 4,
         "buffer": 54,
         "memory_pointer": 18,
-        "stack_pointer": 93,
-        "instruction_pointer": 52,
+        "stack_pointer": 92,
+        "instruction_pointer": 54,
         "command_data": {
           "code": "div",
           "right": {
@@ -38270,8 +38318,8 @@ prob2_clog: |-
         "accumulator": 4,
         "buffer": 54,
         "memory_pointer": 18,
-        "stack_pointer": 93,
-        "instruction_pointer": 46,
+        "stack_pointer": 92,
+        "instruction_pointer": 48,
         "command_data": {
           "code": "jb",
           "offset": -7
@@ -38289,8 +38337,8 @@ prob2_clog: |-
         "accumulator": 4,
         "buffer": 4,
         "memory_pointer": 18,
-        "stack_pointer": 93,
-        "instruction_pointer": 47,
+        "stack_pointer": 92,
+        "instruction_pointer": 49,
         "command_data": {
           "code": "mov",
           "right": {
@@ -38315,8 +38363,8 @@ prob2_clog: |-
         "accumulator": 4,
         "buffer": 4,
         "memory_pointer": 18,
-        "stack_pointer": 93,
-        "instruction_pointer": 48,
+        "stack_pointer": 92,
+        "instruction_pointer": 50,
         "command_data": {
           "code": "jz",
           "offset": 5
@@ -38334,8 +38382,8 @@ prob2_clog: |-
         "accumulator": 4,
         "buffer": 4,
         "memory_pointer": 18,
-        "stack_pointer": 93,
-        "instruction_pointer": 49,
+        "stack_pointer": 92,
+        "instruction_pointer": 51,
         "command_data": {
           "code": "mod",
           "right": {
@@ -38360,8 +38408,8 @@ prob2_clog: |-
         "accumulator": 4,
         "buffer": 52,
         "memory_pointer": 18,
-        "stack_pointer": 93,
-        "instruction_pointer": 50,
+        "stack_pointer": 92,
+        "instruction_pointer": 52,
         "command_data": {
           "code": "add",
           "right": {
@@ -38386,8 +38434,8 @@ prob2_clog: |-
         "accumulator": 4,
         "buffer": 52,
         "memory_pointer": 18,
-        "stack_pointer": 92,
-        "instruction_pointer": 51,
+        "stack_pointer": 91,
+        "instruction_pointer": 53,
         "command_data": {
           "code": "push",
           "right": {
@@ -38408,8 +38456,8 @@ prob2_clog: |-
         "accumulator": 0,
         "buffer": 52,
         "memory_pointer": 18,
-        "stack_pointer": 92,
-        "instruction_pointer": 52,
+        "stack_pointer": 91,
+        "instruction_pointer": 54,
         "command_data": {
           "code": "div",
           "right": {
@@ -38434,8 +38482,8 @@ prob2_clog: |-
         "accumulator": 0,
         "buffer": 52,
         "memory_pointer": 18,
-        "stack_pointer": 92,
-        "instruction_pointer": 46,
+        "stack_pointer": 91,
+        "instruction_pointer": 48,
         "command_data": {
           "code": "jb",
           "offset": -7
@@ -38453,8 +38501,8 @@ prob2_clog: |-
         "accumulator": 0,
         "buffer": 0,
         "memory_pointer": 18,
-        "stack_pointer": 92,
-        "instruction_pointer": 47,
+        "stack_pointer": 91,
+        "instruction_pointer": 49,
         "command_data": {
           "code": "mov",
           "right": {
@@ -38479,8 +38527,8 @@ prob2_clog: |-
         "accumulator": 0,
         "buffer": 0,
         "memory_pointer": 18,
-        "stack_pointer": 92,
-        "instruction_pointer": 53,
+        "stack_pointer": 91,
+        "instruction_pointer": 55,
         "command_data": {
           "code": "jz",
           "offset": 5
@@ -38498,8 +38546,8 @@ prob2_clog: |-
         "accumulator": 52,
         "buffer": 0,
         "memory_pointer": 18,
-        "stack_pointer": 93,
-        "instruction_pointer": 54,
+        "stack_pointer": 92,
+        "instruction_pointer": 56,
         "command_data": {
           "code": "grab",
           "right": {
@@ -38520,8 +38568,8 @@ prob2_clog: |-
         "accumulator": 52,
         "buffer": 0,
         "memory_pointer": 18,
-        "stack_pointer": 93,
-        "instruction_pointer": 55,
+        "stack_pointer": 92,
+        "instruction_pointer": 57,
         "command_data": {
           "code": "jz",
           "offset": 2
@@ -38539,8 +38587,8 @@ prob2_clog: |-
         "accumulator": 52,
         "buffer": 0,
         "memory_pointer": 3,
-        "stack_pointer": 93,
-        "instruction_pointer": 56,
+        "stack_pointer": 92,
+        "instruction_pointer": 58,
         "command_data": {
           "code": "save",
           "right": {
@@ -38562,8 +38610,8 @@ prob2_clog: |-
         "accumulator": 52,
         "buffer": 0,
         "memory_pointer": 3,
-        "stack_pointer": 93,
-        "instruction_pointer": 53,
+        "stack_pointer": 92,
+        "instruction_pointer": 55,
         "command_data": {
           "code": "jb",
           "offset": -4
@@ -38581,8 +38629,8 @@ prob2_clog: |-
         "accumulator": 54,
         "buffer": 0,
         "memory_pointer": 3,
-        "stack_pointer": 94,
-        "instruction_pointer": 54,
+        "stack_pointer": 93,
+        "instruction_pointer": 56,
         "command_data": {
           "code": "grab",
           "right": {
@@ -38603,8 +38651,8 @@ prob2_clog: |-
         "accumulator": 54,
         "buffer": 0,
         "memory_pointer": 3,
-        "stack_pointer": 94,
-        "instruction_pointer": 55,
+        "stack_pointer": 93,
+        "instruction_pointer": 57,
         "command_data": {
           "code": "jz",
           "offset": 2
@@ -38622,8 +38670,8 @@ prob2_clog: |-
         "accumulator": 54,
         "buffer": 0,
         "memory_pointer": 3,
-        "stack_pointer": 94,
-        "instruction_pointer": 56,
+        "stack_pointer": 93,
+        "instruction_pointer": 58,
         "command_data": {
           "code": "save",
           "right": {
@@ -38645,8 +38693,8 @@ prob2_clog: |-
         "accumulator": 54,
         "buffer": 0,
         "memory_pointer": 3,
-        "stack_pointer": 94,
-        "instruction_pointer": 53,
+        "stack_pointer": 93,
+        "instruction_pointer": 55,
         "command_data": {
           "code": "jb",
           "offset": -4
@@ -38664,8 +38712,8 @@ prob2_clog: |-
         "accumulator": 49,
         "buffer": 0,
         "memory_pointer": 3,
-        "stack_pointer": 95,
-        "instruction_pointer": 54,
+        "stack_pointer": 94,
+        "instruction_pointer": 56,
         "command_data": {
           "code": "grab",
           "right": {
@@ -38686,8 +38734,8 @@ prob2_clog: |-
         "accumulator": 49,
         "buffer": 0,
         "memory_pointer": 3,
-        "stack_pointer": 95,
-        "instruction_pointer": 55,
+        "stack_pointer": 94,
+        "instruction_pointer": 57,
         "command_data": {
           "code": "jz",
           "offset": 2
@@ -38705,8 +38753,8 @@ prob2_clog: |-
         "accumulator": 49,
         "buffer": 0,
         "memory_pointer": 3,
-        "stack_pointer": 95,
-        "instruction_pointer": 56,
+        "stack_pointer": 94,
+        "instruction_pointer": 58,
         "command_data": {
           "code": "save",
           "right": {
@@ -38728,8 +38776,8 @@ prob2_clog: |-
         "accumulator": 49,
         "buffer": 0,
         "memory_pointer": 3,
-        "stack_pointer": 95,
-        "instruction_pointer": 53,
+        "stack_pointer": 94,
+        "instruction_pointer": 55,
         "command_data": {
           "code": "jb",
           "offset": -4
@@ -38747,8 +38795,8 @@ prob2_clog: |-
         "accumulator": 51,
         "buffer": 0,
         "memory_pointer": 3,
-        "stack_pointer": 96,
-        "instruction_pointer": 54,
+        "stack_pointer": 95,
+        "instruction_pointer": 56,
         "command_data": {
           "code": "grab",
           "right": {
@@ -38769,8 +38817,8 @@ prob2_clog: |-
         "accumulator": 51,
         "buffer": 0,
         "memory_pointer": 3,
-        "stack_pointer": 96,
-        "instruction_pointer": 55,
+        "stack_pointer": 95,
+        "instruction_pointer": 57,
         "command_data": {
           "code": "jz",
           "offset": 2
@@ -38788,8 +38836,8 @@ prob2_clog: |-
         "accumulator": 51,
         "buffer": 0,
         "memory_pointer": 3,
-        "stack_pointer": 96,
-        "instruction_pointer": 56,
+        "stack_pointer": 95,
+        "instruction_pointer": 58,
         "command_data": {
           "code": "save",
           "right": {
@@ -38811,8 +38859,8 @@ prob2_clog: |-
         "accumulator": 51,
         "buffer": 0,
         "memory_pointer": 3,
-        "stack_pointer": 96,
-        "instruction_pointer": 53,
+        "stack_pointer": 95,
+        "instruction_pointer": 55,
         "command_data": {
           "code": "jb",
           "offset": -4
@@ -38830,8 +38878,8 @@ prob2_clog: |-
         "accumulator": 55,
         "buffer": 0,
         "memory_pointer": 3,
-        "stack_pointer": 97,
-        "instruction_pointer": 54,
+        "stack_pointer": 96,
+        "instruction_pointer": 56,
         "command_data": {
           "code": "grab",
           "right": {
@@ -38852,8 +38900,8 @@ prob2_clog: |-
         "accumulator": 55,
         "buffer": 0,
         "memory_pointer": 3,
-        "stack_pointer": 97,
-        "instruction_pointer": 55,
+        "stack_pointer": 96,
+        "instruction_pointer": 57,
         "command_data": {
           "code": "jz",
           "offset": 2
@@ -38871,8 +38919,8 @@ prob2_clog: |-
         "accumulator": 55,
         "buffer": 0,
         "memory_pointer": 3,
-        "stack_pointer": 97,
-        "instruction_pointer": 56,
+        "stack_pointer": 96,
+        "instruction_pointer": 58,
         "command_data": {
           "code": "save",
           "right": {
@@ -38894,8 +38942,8 @@ prob2_clog: |-
         "accumulator": 55,
         "buffer": 0,
         "memory_pointer": 3,
-        "stack_pointer": 97,
-        "instruction_pointer": 53,
+        "stack_pointer": 96,
+        "instruction_pointer": 55,
         "command_data": {
           "code": "jb",
           "offset": -4
@@ -38913,8 +38961,8 @@ prob2_clog: |-
         "accumulator": 51,
         "buffer": 0,
         "memory_pointer": 3,
-        "stack_pointer": 98,
-        "instruction_pointer": 54,
+        "stack_pointer": 97,
+        "instruction_pointer": 56,
         "command_data": {
           "code": "grab",
           "right": {
@@ -38935,8 +38983,8 @@ prob2_clog: |-
         "accumulator": 51,
         "buffer": 0,
         "memory_pointer": 3,
-        "stack_pointer": 98,
-        "instruction_pointer": 55,
+        "stack_pointer": 97,
+        "instruction_pointer": 57,
         "command_data": {
           "code": "jz",
           "offset": 2
@@ -38954,8 +39002,8 @@ prob2_clog: |-
         "accumulator": 51,
         "buffer": 0,
         "memory_pointer": 3,
-        "stack_pointer": 98,
-        "instruction_pointer": 56,
+        "stack_pointer": 97,
+        "instruction_pointer": 58,
         "command_data": {
           "code": "save",
           "right": {
@@ -38977,8 +39025,8 @@ prob2_clog: |-
         "accumulator": 51,
         "buffer": 0,
         "memory_pointer": 3,
-        "stack_pointer": 98,
-        "instruction_pointer": 53,
+        "stack_pointer": 97,
+        "instruction_pointer": 55,
         "command_data": {
           "code": "jb",
           "offset": -4
@@ -38996,8 +39044,8 @@ prob2_clog: |-
         "accumulator": 50,
         "buffer": 0,
         "memory_pointer": 3,
-        "stack_pointer": 99,
-        "instruction_pointer": 54,
+        "stack_pointer": 98,
+        "instruction_pointer": 56,
         "command_data": {
           "code": "grab",
           "right": {
@@ -39018,8 +39066,8 @@ prob2_clog: |-
         "accumulator": 50,
         "buffer": 0,
         "memory_pointer": 3,
-        "stack_pointer": 99,
-        "instruction_pointer": 55,
+        "stack_pointer": 98,
+        "instruction_pointer": 57,
         "command_data": {
           "code": "jz",
           "offset": 2
@@ -39037,8 +39085,8 @@ prob2_clog: |-
         "accumulator": 50,
         "buffer": 0,
         "memory_pointer": 3,
-        "stack_pointer": 99,
-        "instruction_pointer": 56,
+        "stack_pointer": 98,
+        "instruction_pointer": 58,
         "command_data": {
           "code": "save",
           "right": {
@@ -39060,8 +39108,8 @@ prob2_clog: |-
         "accumulator": 50,
         "buffer": 0,
         "memory_pointer": 3,
-        "stack_pointer": 99,
-        "instruction_pointer": 53,
+        "stack_pointer": 98,
+        "instruction_pointer": 55,
         "command_data": {
           "code": "jb",
           "offset": -4
@@ -39079,8 +39127,8 @@ prob2_clog: |-
         "accumulator": 0,
         "buffer": 0,
         "memory_pointer": 3,
-        "stack_pointer": 100,
-        "instruction_pointer": 54,
+        "stack_pointer": 99,
+        "instruction_pointer": 56,
         "command_data": {
           "code": "grab",
           "right": {
@@ -39101,8 +39149,8 @@ prob2_clog: |-
         "accumulator": 0,
         "buffer": 0,
         "memory_pointer": 3,
-        "stack_pointer": 100,
-        "instruction_pointer": 57,
+        "stack_pointer": 99,
+        "instruction_pointer": 59,
         "command_data": {
           "code": "jz",
           "offset": 2
@@ -39110,6 +39158,77 @@ prob2_clog: |-
       },
       "flags": {
         "zero": true,
+        "negative": false
+      },
+      "input_data": null,
+      "output_data": null
+    },
+    {
+      "registries": {
+        "accumulator": 10,
+        "buffer": 0,
+        "memory_pointer": 3,
+        "stack_pointer": 99,
+        "instruction_pointer": 60,
+        "command_data": {
+          "code": "mov",
+          "right": {
+            "type": "registry",
+            "code": "A"
+          },
+          "left": {
+            "type": "value",
+            "value": 10
+          }
+        }
+      },
+      "flags": {
+        "zero": false,
+        "negative": false
+      },
+      "input_data": null,
+      "output_data": null
+    },
+    {
+      "registries": {
+        "accumulator": 10,
+        "buffer": 0,
+        "memory_pointer": 3,
+        "stack_pointer": 99,
+        "instruction_pointer": 61,
+        "command_data": {
+          "code": "save",
+          "right": {
+            "type": "registry",
+            "code": "A"
+          },
+          "address": 3
+        }
+      },
+      "flags": {
+        "zero": false,
+        "negative": false
+      },
+      "input_data": null,
+      "output_data": 10
+    },
+    {
+      "registries": {
+        "accumulator": 4613732,
+        "buffer": 0,
+        "memory_pointer": 3,
+        "stack_pointer": 100,
+        "instruction_pointer": 62,
+        "command_data": {
+          "code": "grab",
+          "right": {
+            "type": "registry",
+            "code": "A"
+          }
+        }
+      },
+      "flags": {
+        "zero": false,
         "negative": false
       },
       "input_data": null,
@@ -39402,6 +39521,24 @@ prob2_curp: |-
       "address": 18
     },
     {
+      "code": "push",
+      "right": {
+        "type": "registry",
+        "code": "A"
+      }
+    },
+    {
+      "code": "mov",
+      "right": {
+        "type": "registry",
+        "code": "A"
+      },
+      "left": {
+        "type": "registry",
+        "code": "A"
+      }
+    },
+    {
       "code": "jz",
       "offset": 1
     },
@@ -39569,5 +39706,31 @@ prob2_curp: |-
     {
       "code": "jb",
       "offset": -4
+    },
+    {
+      "code": "mov",
+      "right": {
+        "type": "registry",
+        "code": "A"
+      },
+      "left": {
+        "type": "value",
+        "value": 10
+      }
+    },
+    {
+      "code": "save",
+      "right": {
+        "type": "registry",
+        "code": "A"
+      },
+      "address": 3
+    },
+    {
+      "code": "grab",
+      "right": {
+        "type": "registry",
+        "code": "A"
+      }
     }
   ]
