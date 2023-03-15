@@ -1,0 +1,150 @@
+var-if:
+- '{"code": "load", "right": {"type": "registry", "code": "A"}, "address": 16}'
+- '{"code": "jz", "offset": 2}'
+- '{"code": "load", "right": {"type": "registry", "code": "A"}, "address": 16}'
+- '{"code": "jb", "offset": 1}'
+- '{"code": "mov", "right": {"type": "registry", "code": "A"}, "left": {"type": "value",
+  "value": 0}}'
+'>=-if':
+- '{"code": "mov", "right": {"type": "registry", "code": "A"}, "left": {"type": "value",
+  "value": 1}}'
+- '{"code": "mov", "right": {"type": "registry", "code": "B"}, "left": {"type": "value",
+  "value": 1}}'
+- '{"code": "cmp", "right": {"type": "registry", "code": "A"}, "left": {"type": "registry",
+  "code": "B"}}'
+- '{"code": "jn", "offset": 2}'
+- '{"code": "load", "right": {"type": "registry", "code": "A"}, "address": 16}'
+- '{"code": "jb", "offset": 1}'
+- '{"code": "mov", "right": {"type": "registry", "code": "A"}, "left": {"type": "value",
+  "value": 0}}'
+<-if:
+- '{"code": "mov", "right": {"type": "registry", "code": "A"}, "left": {"type": "value",
+  "value": 1}}'
+- '{"code": "mov", "right": {"type": "registry", "code": "B"}, "left": {"type": "value",
+  "value": 1}}'
+- '{"code": "cmp", "right": {"type": "registry", "code": "A"}, "left": {"type": "registry",
+  "code": "B"}}'
+- '{"code": "jn", "offset": 1}'
+- '{"code": "jb", "offset": 2}'
+- '{"code": "load", "right": {"type": "registry", "code": "A"}, "address": 16}'
+- '{"code": "jb", "offset": 1}'
+- '{"code": "mov", "right": {"type": "registry", "code": "A"}, "left": {"type": "value",
+  "value": 0}}'
+<=-if:
+- '{"code": "mov", "right": {"type": "registry", "code": "A"}, "left": {"type": "value",
+  "value": 1}}'
+- '{"code": "mov", "right": {"type": "registry", "code": "B"}, "left": {"type": "value",
+  "value": 1}}'
+- '{"code": "pmc", "right": {"type": "registry", "code": "A"}, "left": {"type": "registry",
+  "code": "B"}}'
+- '{"code": "jn", "offset": 2}'
+- '{"code": "load", "right": {"type": "registry", "code": "A"}, "address": 16}'
+- '{"code": "jb", "offset": 1}'
+- '{"code": "mov", "right": {"type": "registry", "code": "A"}, "left": {"type": "value",
+  "value": 0}}'
+'>-if':
+- '{"code": "mov", "right": {"type": "registry", "code": "A"}, "left": {"type": "value",
+  "value": 1}}'
+- '{"code": "mov", "right": {"type": "registry", "code": "B"}, "left": {"type": "value",
+  "value": 1}}'
+- '{"code": "pmc", "right": {"type": "registry", "code": "A"}, "left": {"type": "registry",
+  "code": "B"}}'
+- '{"code": "jn", "offset": 1}'
+- '{"code": "jb", "offset": 2}'
+- '{"code": "load", "right": {"type": "registry", "code": "A"}, "address": 16}'
+- '{"code": "jb", "offset": 1}'
+- '{"code": "mov", "right": {"type": "registry", "code": "A"}, "left": {"type": "value",
+  "value": 0}}'
+=-if:
+- '{"code": "mov", "right": {"type": "registry", "code": "A"}, "left": {"type": "value",
+  "value": 1}}'
+- '{"code": "mov", "right": {"type": "registry", "code": "B"}, "left": {"type": "value",
+  "value": 1}}'
+- '{"code": "cmp", "right": {"type": "registry", "code": "A"}, "left": {"type": "registry",
+  "code": "B"}}'
+- '{"code": "jz", "offset": 1}'
+- '{"code": "jb", "offset": 2}'
+- '{"code": "load", "right": {"type": "registry", "code": "A"}, "address": 16}'
+- '{"code": "jb", "offset": 1}'
+- '{"code": "mov", "right": {"type": "registry", "code": "A"}, "left": {"type": "value",
+  "value": 0}}'
+'!=-if':
+- '{"code": "mov", "right": {"type": "registry", "code": "A"}, "left": {"type": "value",
+  "value": 1}}'
+- '{"code": "mov", "right": {"type": "registry", "code": "B"}, "left": {"type": "value",
+  "value": 1}}'
+- '{"code": "cmp", "right": {"type": "registry", "code": "A"}, "left": {"type": "registry",
+  "code": "B"}}'
+- '{"code": "jz", "offset": 2}'
+- '{"code": "load", "right": {"type": "registry", "code": "A"}, "address": 16}'
+- '{"code": "jb", "offset": 1}'
+- '{"code": "mov", "right": {"type": "registry", "code": "A"}, "left": {"type": "value",
+  "value": 0}}'
+var-loop:
+- '{"code": "load", "right": {"type": "registry", "code": "A"}, "address": 16}'
+- '{"code": "jz", "offset": 2}'
+- '{"code": "load", "right": {"type": "registry", "code": "A"}, "address": 16}'
+- '{"code": "jb", "offset": -4}'
+'>=-loop':
+- '{"code": "mov", "right": {"type": "registry", "code": "A"}, "left": {"type": "value",
+  "value": 1}}'
+- '{"code": "mov", "right": {"type": "registry", "code": "B"}, "left": {"type": "value",
+  "value": 1}}'
+- '{"code": "cmp", "right": {"type": "registry", "code": "A"}, "left": {"type": "registry",
+  "code": "B"}}'
+- '{"code": "jn", "offset": 2}'
+- '{"code": "load", "right": {"type": "registry", "code": "A"}, "address": 16}'
+- '{"code": "jb", "offset": -6}'
+<-loop:
+- '{"code": "mov", "right": {"type": "registry", "code": "A"}, "left": {"type": "value",
+  "value": 1}}'
+- '{"code": "mov", "right": {"type": "registry", "code": "B"}, "left": {"type": "value",
+  "value": 1}}'
+- '{"code": "cmp", "right": {"type": "registry", "code": "A"}, "left": {"type": "registry",
+  "code": "B"}}'
+- '{"code": "jn", "offset": 1}'
+- '{"code": "jb", "offset": 2}'
+- '{"code": "load", "right": {"type": "registry", "code": "A"}, "address": 16}'
+- '{"code": "jb", "offset": -7}'
+<=-loop:
+- '{"code": "mov", "right": {"type": "registry", "code": "A"}, "left": {"type": "value",
+  "value": 1}}'
+- '{"code": "mov", "right": {"type": "registry", "code": "B"}, "left": {"type": "value",
+  "value": 1}}'
+- '{"code": "pmc", "right": {"type": "registry", "code": "A"}, "left": {"type": "registry",
+  "code": "B"}}'
+- '{"code": "jn", "offset": 2}'
+- '{"code": "load", "right": {"type": "registry", "code": "A"}, "address": 16}'
+- '{"code": "jb", "offset": -6}'
+'>-loop':
+- '{"code": "mov", "right": {"type": "registry", "code": "A"}, "left": {"type": "value",
+  "value": 1}}'
+- '{"code": "mov", "right": {"type": "registry", "code": "B"}, "left": {"type": "value",
+  "value": 1}}'
+- '{"code": "pmc", "right": {"type": "registry", "code": "A"}, "left": {"type": "registry",
+  "code": "B"}}'
+- '{"code": "jn", "offset": 1}'
+- '{"code": "jb", "offset": 2}'
+- '{"code": "load", "right": {"type": "registry", "code": "A"}, "address": 16}'
+- '{"code": "jb", "offset": -7}'
+=-loop:
+- '{"code": "mov", "right": {"type": "registry", "code": "A"}, "left": {"type": "value",
+  "value": 1}}'
+- '{"code": "mov", "right": {"type": "registry", "code": "B"}, "left": {"type": "value",
+  "value": 1}}'
+- '{"code": "cmp", "right": {"type": "registry", "code": "A"}, "left": {"type": "registry",
+  "code": "B"}}'
+- '{"code": "jz", "offset": 1}'
+- '{"code": "jb", "offset": 2}'
+- '{"code": "load", "right": {"type": "registry", "code": "A"}, "address": 16}'
+- '{"code": "jb", "offset": -7}'
+'!=-loop':
+- '{"code": "mov", "right": {"type": "registry", "code": "A"}, "left": {"type": "value",
+  "value": 1}}'
+- '{"code": "mov", "right": {"type": "registry", "code": "B"}, "left": {"type": "value",
+  "value": 1}}'
+- '{"code": "cmp", "right": {"type": "registry", "code": "A"}, "left": {"type": "registry",
+  "code": "B"}}'
+- '{"code": "jz", "offset": 2}'
+- '{"code": "load", "right": {"type": "registry", "code": "A"}, "address": 16}'
+- '{"code": "jb", "offset": -6}'

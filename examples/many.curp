@@ -7,7 +7,82 @@
     },
     "left": {
       "type": "value",
-      "value": 11111
+      "value": 1
+    }
+  },
+  {
+    "code": "mov",
+    "right": {
+      "type": "registry",
+      "code": "B"
+    },
+    "left": {
+      "type": "value",
+      "value": 0
+    }
+  },
+  {
+    "code": "cmp",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "left": {
+      "type": "registry",
+      "code": "B"
+    }
+  },
+  {
+    "code": "jz",
+    "offset": 1
+  },
+  {
+    "code": "jb",
+    "offset": 2
+  },
+  {
+    "code": "load",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "address": 1
+  },
+  {
+    "code": "jb",
+    "offset": 7
+  },
+  {
+    "code": "mov",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "left": {
+      "type": "value",
+      "value": 111111
+    }
+  },
+  {
+    "code": "mov",
+    "right": {
+      "type": "registry",
+      "code": "B"
+    },
+    "left": {
+      "type": "value",
+      "value": 100000
+    }
+  },
+  {
+    "code": "mod",
+    "right": {
+      "type": "registry",
+      "code": "A"
+    },
+    "left": {
+      "type": "registry",
+      "code": "B"
     }
   },
   {
@@ -53,227 +128,6 @@
       "type": "registry",
       "code": "B"
     }
-  },
-  {
-    "code": "push",
-    "right": {
-      "type": "registry",
-      "code": "A"
-    }
-  },
-  {
-    "code": "mov",
-    "right": {
-      "type": "registry",
-      "code": "A"
-    },
-    "left": {
-      "type": "registry",
-      "code": "A"
-    }
-  },
-  {
-    "code": "jz",
-    "offset": 1
-  },
-  {
-    "code": "jb",
-    "offset": 3
-  },
-  {
-    "code": "add",
-    "right": {
-      "type": "registry",
-      "code": "A"
-    },
-    "left": {
-      "type": "value",
-      "value": 48
-    }
-  },
-  {
-    "code": "save",
-    "right": {
-      "type": "registry",
-      "code": "A"
-    },
-    "address": 3
-  },
-  {
-    "code": "jb",
-    "offset": 18
-  },
-  {
-    "code": "jn",
-    "offset": 1
-  },
-  {
-    "code": "jb",
-    "offset": 3
-  },
-  {
-    "code": "mov",
-    "right": {
-      "type": "registry",
-      "code": "B"
-    },
-    "left": {
-      "type": "value",
-      "value": 45
-    }
-  },
-  {
-    "code": "save",
-    "right": {
-      "type": "registry",
-      "code": "B"
-    },
-    "address": 3
-  },
-  {
-    "code": "mul",
-    "right": {
-      "type": "registry",
-      "code": "A"
-    },
-    "left": {
-      "type": "value",
-      "value": -1
-    }
-  },
-  {
-    "code": "mov",
-    "right": {
-      "type": "registry",
-      "code": "B"
-    },
-    "left": {
-      "type": "value",
-      "value": 0
-    }
-  },
-  {
-    "code": "push",
-    "right": {
-      "type": "registry",
-      "code": "B"
-    }
-  },
-  {
-    "code": "mov",
-    "right": {
-      "type": "registry",
-      "code": "B"
-    },
-    "left": {
-      "type": "registry",
-      "code": "A"
-    }
-  },
-  {
-    "code": "jz",
-    "offset": 5
-  },
-  {
-    "code": "mod",
-    "right": {
-      "type": "registry",
-      "code": "B"
-    },
-    "left": {
-      "type": "value",
-      "value": 10
-    }
-  },
-  {
-    "code": "add",
-    "right": {
-      "type": "registry",
-      "code": "B"
-    },
-    "left": {
-      "type": "value",
-      "value": 48
-    }
-  },
-  {
-    "code": "push",
-    "right": {
-      "type": "registry",
-      "code": "B"
-    }
-  },
-  {
-    "code": "div",
-    "right": {
-      "type": "registry",
-      "code": "A"
-    },
-    "left": {
-      "type": "value",
-      "value": 10
-    }
-  },
-  {
-    "code": "jb",
-    "offset": -7
-  },
-  {
-    "code": "grab",
-    "right": {
-      "type": "registry",
-      "code": "A"
-    }
-  },
-  {
-    "code": "jz",
-    "offset": 2
-  },
-  {
-    "code": "save",
-    "right": {
-      "type": "registry",
-      "code": "A"
-    },
-    "address": 3
-  },
-  {
-    "code": "jb",
-    "offset": -4
-  },
-  {
-    "code": "mov",
-    "right": {
-      "type": "registry",
-      "code": "A"
-    },
-    "left": {
-      "type": "value",
-      "value": 10
-    }
-  },
-  {
-    "code": "save",
-    "right": {
-      "type": "registry",
-      "code": "A"
-    },
-    "address": 3
-  },
-  {
-    "code": "grab",
-    "right": {
-      "type": "registry",
-      "code": "A"
-    }
-  },
-  {
-    "code": "save",
-    "right": {
-      "type": "registry",
-      "code": "A"
-    },
-    "address": 16
   },
   {
     "code": "push",

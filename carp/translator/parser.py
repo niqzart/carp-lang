@@ -28,6 +28,14 @@ class Symbol(BaseModel):
     def is_closing(self) -> bool:
         return self.text == ")"
 
+    @property
+    def is_digit(self) -> bool:
+        if len(self.text) == 0:
+            return False
+        if self.text[0] == "-":
+            return self.text[1:].isdigit()
+        return self.text.isdigit()
+
     def __str__(self) -> str:
         if self.is_quoted:
             return self.text[1:-1].replace(r"\n", "\n")
